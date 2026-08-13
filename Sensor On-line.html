@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Analisador de Sensores NTC</title>
+    <meta name="theme-color" content="#007bff">
+    <meta name="description" content="Analisador de sensores NTC para ar-condicionado - Reclim Cursos e Assistência Técnica[span_2](start_span)[span_2](end_span)">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { max-width: 450px; width: 100%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 40px; }
+        h3 { color: #007bff; text-align: center; margin-bottom: 20px; font-size: 1.2em; }
+        label { font-weight: bold; color: #555; display: block; margin: 15px 0 5px; font-size: 0.9em; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 20px; font-size: 1em; }
+        .btn-principal { background: #007bff; color: white; }
+        .btn-secundario { background: #6c757d; color: white; margin-top: 10px; }
+        .btn-alterar { background: #28a745; color: white; margin-top: 10px; }
+        .btn-restaurar { background: #ffc107; color: #212529; margin-top: 10px; }
+        #resultado, #areaEdicao { display: none; margin-top: 20px; padding: 15px; border-radius: 8px; }
+        #resultado { background: #e9ecef; border-left: 5px solid #007bff; }
+        #areaEdicao { background: #fff3cd; border-left: 5px solid #ffc107; }
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 0.85em;
+            margin-top: 40px;
+            padding: 25px 0 20px;
+            border-top: 1px solid #eee;
+            line-height: 1.6;
+        }
+        .topo { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; position: relative; }
+        .topo h3 { margin-bottom: 0; }
+        #btnMenu { width: auto; padding: 6px 12px; background: transparent; color: #333; font-size: 1.4em; margin-top: 0; border-radius: 6px; line-height: 1; }
+        #btnMenu:hover { background: #f0f2f5; }
+        .menu-dropdown { display: none; position: absolute; top: 42px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 20; min-width: 220px; overflow: hidden; }
+        .menu-dropdown.aberto { display: block; }
+        .menu-item { padding: 12px 16px; font-size: 0.9em; cursor: pointer; color: #333; }
+        .menu-item:hover { background: #f0f2f5; }
+        .menu-submenu { display: none; border-top: 1px solid #eee; border-bottom: 1px solid #eee; background: #fafbfc; }
+        .menu-submenu.aberto { display: block; }
+        .menu-subitem { padding: 10px 16px 10px 24px; font-size: 0.85em; cursor: pointer; color: #495057; }
+        .menu-subitem:hover { background: #f0f2f5; color: #007bff; }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+        .modal-overlay.aberto { display: flex; }
+        .modal-box { background: white; border-radius: 12px; padding: 22px; max-width: 420px; width: 100%; max-height: 85vh; overflow-y: auto; }
+        .modal-box h4 { color: #007bff; margin-bottom: 15px; }
+        .modal-box label { margin: 12px 0 5px; }
+        .btn-row { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        .btn-row button { flex: 1; min-width: 80px; margin-top: 0; padding: 10px; font-size: 0.85em; }
+        .btn-remover { background: #dc3545; color: white; }
+        .ajuda-item { margin-bottom: 14px; font-size: 0.9em; line-height: 1.55; color: #333; }
+        .ajuda-item b { color: #007bff; }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="appMainContainer">
+        <div class="topo">
+            <h3 data-pt="Analisador de Sensores NTC" data-en="NTC Sensor Analyzer">Analisador de Sensores NTC[span_3](start_span)[span_3](end_span)</h3>
+            <button id="btnMenu" type="button">⋮</button>
+            <div class="menu-dropdown" id="menuDropdown">
+                <div class="menu-item" id="menuCadastrarFabricante" data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">1. Cadastrar Fabricante[span_4](start_span)[span_4](end_span)</div>
+                <div class="menu-item" id="menuIdiomaToggle" data-pt="Idioma" data-en="Language">2. Idioma[span_5](start_span)[span_5](end_span)</div>
+                <div class="menu-submenu" id="menuSubIdioma">
+                    <div class="menu-subitem" id="btnIdiomaPt">Português[span_6](start_span)[span_6](end_span)</div>
+                    <div class="menu-subitem" id="btnIdiomaEn" data-pt="Inglês" data-en="English">Inglês[span_7](start_span)[span_7](end_span)</div>
+                </div>
+                <div class="menu-item" id="menuAjuda" data-pt="Ajuda" data-en="Help">3. Ajuda[span_8](start_span)[span_8](end_span)</div>
+            </div>
+        </div>
+
+        <label data-pt="Fabricante:" data-en="Manufacturer:">Fabricante:[span_9](start_span)[span_9](end_span)</label>
+        <select id="tabela">
+            <optgroup label="🔍 Identificação" data-en-label="🔍 Identification">
+                <option value="identificar" data-en="Sensor identifier">Identificador de sensor[span_10](start_span)[span_10](end_span)</option>
+            </optgroup>
+            <optgroup label="1. LG" data-en-label="1. LG">
+                <option value="lg_t1" data-en="LG (Defrost or condenser sensor)">LG (Sensor de degelo ou condensador)[span_11](start_span)[span_11](end_span)</option>
+                <option value="lg_t2" data-en="LG (Indoor or outdoor ambient sensor)">LG (Sensor amb. interno ou externo)[span_12](start_span)[span_12](end_span)</option>
+                <option value="lg_t3" data-en="LG (Discharge sensor)">LG (Sensor de descarga)[span_13](start_span)[span_13](end_span)</option>
+            </optgroup>
+            <optgroup label="2. TCL - TAC ou KOMECO - KAC" data-en-label="2. TCL - TAC or KOMECO - KAC">
+                <option value="tcl_amb" data-en="TCL or Komeco (Indoor ambient sensor)">TCL ou Komeco (Sensor amb. interno)[span_14](start_span)[span_14](end_span)</option>
+                <option value="tcl_deg" data-en="TCL or Komeco (Defrost sensor)">TCL ou Komeco (Sensor de degelo)[span_15](start_span)[span_15](end_span)</option>
+                <option value="tcl_cond" data-en="TCL or Komeco (Condenser sensor)">TCL ou Komeco (Sensor do condensador)[span_16](start_span)[span_16](end_span)</option>
+                <option value="tcl_amb_ext" data-en="TCL or Komeco (Outdoor ambient sensor)">TCL ou Komeco (Sensor amb. externo)[span_17](start_span)[span_17](end_span)</option>
+                <option value="tcl_desc" data-en="TCL or Komeco (Discharge sensor)">TCL ou Komeco (Sensor de descarga)[span_18](start_span)[span_18](end_span)</option>
+            </optgroup>
+            <optgroup label="3. Agratto - Quadrada" data-en-label="3. Agratto - Square">
+                <option value="agratto_amb_intq" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)[span_19](start_span)[span_19](end_span)</option>
+                <option value="agratto_degq" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)[span_20](start_span)[span_20](end_span)</option>
+                <option value="agratto_descq" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)[span_21](start_span)[span_21](end_span)</option>
+                <option value="agratto_condq" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)[span_22](start_span)[span_22](end_span)</option>
+                <option value="agratto_amb_extq" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)[span_23](start_span)[span_23](end_span)</option>
+            </optgroup>
+            <optgroup label="4. Agratto - Barril" data-en-label="4. Agratto - Barrel">
+                <option value="agratto_amb_intb" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)[span_24](start_span)[span_24](end_span)</option>
+                <option value="agratto_degb" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)[span_25](start_span)[span_25](end_span)</option>
+                <option value="agratto_descb" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)[span_26](start_span)[span_26](end_span)</option>
+                <option value="agratto_condb" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)[span_27](start_span)[span_27](end_span)</option>
+                <option value="agratto_amb_extb" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)[span_28](start_span)[span_28](end_span)</option>
+            </optgroup>
+            <optgroup label="5. Samsung" data-en-label="5. Samsung">
+                <option value="sam_amb" data-en="Samsung (Indoor ambient sensor)">Samsung (Sensor amb. interno)[span_29](start_span)[span_29](end_span)</option>
+                <option value="sam_deg" data-en="Samsung (Defrost sensor)">Samsung (Sensor de degelo)[span_30](start_span)[span_30](end_span)</option>
+                <option value="sam_comp" data-en="Samsung (Discharge sensor)">Samsung (Sensor de descarga)[span_31](start_span)[span_31](end_span)</option>
+                <option value="sam_cond" data-en="Samsung (Condenser sensor)">Samsung (Sensor do condensador)[span_32](start_span)[span_32](end_span)</option>
+                <option value="sam_amb_ext" data-en="Samsung (Outdoor ambient sensor)">Samsung (Sensor amb. externo)[span_33](start_span)[span_33](end_span)</option>
+            </optgroup>
+            <optgroup label="6. Gree" data-en-label="6. Gree">
+                <option value="gree_amb_int" data-en="Gree (Indoor ambient sensor)">Gree (Sensor amb. interno)[span_34](start_span)[span_34](end_span)</option>
+                <option value="gree_amb_ext" data-en="Gree (Outdoor ambient sensor)">Gree (Sensor amb. externo)[span_35](start_span)[span_35](end_span)</option>
+                <option value="gree_deg" data-en="Gree (Defrost sensor)">Gree (Sensor de degelo)[span_36](start_span)[span_36](end_span)</option>
+                <option value="gree_cond" data-en="Gree (Condenser sensor)">Gree (Sensor do condensador)[span_37](start_span)[span_37](end_span)</option>
+                <option value="gree_comp" data-en="Gree (Discharge sensor)">Gree (Sensor de descarga)[span_38](start_span)[span_38](end_span)</option>
+            </optgroup>
+            <optgroup label="7. Midea" data-en-label="7. Midea">
+                <option value="mid_amb" data-en="Midea (Indoor ambient sensor)">Midea (Sensor amb. interno)[span_39](start_span)[span_39](end_span)</option>
+                <option value="mid_deg" data-en="Midea (Defrost sensor)">Midea (Sensor de degelo)[span_40](start_span)[span_40](end_span)</option>
+                <option value="mid_comp" data-en="Midea (Discharge sensor)">Midea (Sensor de descarga)[span_41](start_span)[span_41](end_span)</option>
+                <option value="mid_cond" data-en="Midea (Condenser sensor)">Midea (Sensor do condensador)[span_42](start_span)[span_42](end_span)</option>
+                <option value="mid_amb_ext" data-en="Midea (Outdoor ambient sensor)">Midea (Sensor amb. externo)[span_43](start_span)[span_43](end_span)</option>
+            </optgroup>
+            <optgroup label="8. Fujitsu" data-en-label="8. Fujitsu">
+                <option value="fuj_amb" data-en="Fujitsu (Indoor ambient sensor)">Fujitsu (Sensor amb. interno)[span_44](start_span)[span_44](end_span)</option>
+                <option value="fuj_deg" data-en="Fujitsu (Defrost sensor)">Fujitsu (Sensor de degelo)[span_45](start_span)[span_45](end_span)</option>
+                <option value="fuj_comp" data-en="Fujitsu (Discharge sensor)">Fujitsu (Sensor de descarga)[span_46](start_span)[span_46](end_span)</option>
+                <option value="fuj_amb_ext" data-en="Fujitsu (Outdoor ambient sensor)">Fujitsu (Sensor amb. externo)[span_47](start_span)[span_47](end_span)</option>
+                <option value="fuj_cond" data-en="Fujitsu (Condenser sensor)">Fujitsu (Sensor do condensador)[span_48](start_span)[span_48](end_span)</option>
+            </optgroup>
+            <optgroup label="9. Elgin" data-en-label="9. Elgin">
+                <option value="elgin_amb_int" data-en="Elgin (Indoor ambient sensor)">Elgin (Sensor amb. interno)[span_49](start_span)[span_49](end_span)</option>
+                <option value="elgin_deg" data-en="Elgin (Defrost sensor)">Elgin (Sensor de degelo)[span_50](start_span)[span_50](end_span)</option>
+                <option value="elgin_desc" data-en="Elgin (Discharge sensor)">Elgin (Sensor de descarga)[span_51](start_span)[span_51](end_span)</option>
+                <option value="elgin_cond" data-en="Elgin (Condenser sensor)">Elgin (Sensor do condensador)[span_52](start_span)[span_52](end_span)</option>
+                <option value="elgin_amb_ext" data-en="Elgin (Outdoor ambient sensor)">Elgin (Sensor amb. externo)[span_53](start_span)[span_53](end_span)</option>
+            </optgroup>
+            <optgroup label="10. Consul" data-en-label="10. Consul">
+                <option value="consul_amb_int" data-en="Consul (Indoor ambient sensor)">Consul (Sensor amb. interno)[span_54](start_span)[span_54](end_span)</option>
+                <option value="consul_deg" data-en="Consul (Defrost sensor)">Consul (Sensor de degelo)[span_55](start_span)[span_55](end_span)</option>
+                <option value="consul_desc" data-en="Consul (Discharge sensor)">Consul (Sensor de descarga)[span_56](start_span)[span_56](end_span)</option>
+                <option value="consul_cond" data-en="Consul (Condenser sensor)">Consul (Sensor do condensador)[span_57](start_span)[span_57](end_span)</option>
+                <option value="consul_amb_ext" data-en="Consul (Outdoor ambient sensor)">Consul (Sensor amb. externo)[span_58](start_span)[span_58](end_span)</option>
+            </optgroup>
+            <optgroup label="11. Philco - Quadrada" data-en-label="11. Philco - Square">
+                <option value="philco_amb_intq" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)[span_59](start_span)[span_59](end_span)</option>
+                <option value="philco_degq" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)[span_60](start_span)[span_60](end_span)</option>
+                <option value="philco_amb_extq" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)[span_61](start_span)[span_61](end_span)</option>
+                <option value="philco_condq" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)[span_62](start_span)[span_62](end_span)</option>
+                <option value="philco_descq" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)[span_63](start_span)[span_63](end_span)</option>
+            </optgroup>
+            <optgroup label="12. Philco - Barril" data-en-label="12. Philco - Barrel">
+                <option value="philco_amb_intb" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)[span_64](start_span)[span_64](end_span)</option>
+                <option value="philco_degb" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)[span_65](start_span)[span_65](end_span)</option>
+                <option value="philco_amb_extb" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)[span_66](start_span)[span_66](end_span)</option>
+                <option value="philco_condb" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)[span_67](start_span)[span_67](end_span)</option>
+                <option value="philco_descb" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)[span_68](start_span)[span_68](end_span)</option>
+            </optgroup>
+            <optgroup label="13. Electrolux" data-en-label="13. Electrolux">
+                <option value="electrolux_amb_int" data-en="Electrolux (Indoor ambient sensor)">Electrolux (Sensor amb. interno)[span_69](start_span)[span_69](end_span)</option>
+                <option value="electrolux_deg" data-en="Electrolux (Defrost sensor)">Electrolux (Sensor de degelo)[span_70](start_span)[span_70](end_span)</option>
+                <option value="electrolux_amb_ext" data-en="Electrolux (Outdoor ambient sensor)">Electrolux (Sensor amb. externo)[span_71](start_span)[span_71](end_span)</option>
+                <option value="electrolux_cond" data-en="Electrolux (Condenser sensor)">Electrolux (Sensor do condensador)[span_72](start_span)[span_72](end_span)</option>
+                <option value="electrolux_desc" data-en="Electrolux (Discharge sensor)">Electrolux (Sensor de descarga)[span_73](start_span)[span_73](end_span)</option>
+            </optgroup>
+            <optgroup label="14. Daikin" data-en-label="14. Daikin">
+                <option value="daikin_amb_int" data-en="Daikin (Indoor ambient sensor)">Daikin (Sensor amb. interno)[span_74](start_span)[span_74](end_span)</option>
+                <option value="daikin_deg" data-en="Daikin (Defrost sensor)">Daikin (Sensor de degelo)[span_75](start_span)[span_75](end_span)</option>
+                <option value="daikin_amb_ext" data-en="Daikin (Outdoor ambient sensor)">Daikin (Sensor amb. externo)[span_76](start_span)[span_76](end_span)</option>
+                <option value="daikin_cond" data-en="Daikin (Condenser sensor)">Daikin (Sensor do condensador)[span_77](start_span)[span_77](end_span)</option>
+                <option value="daikin_desc" data-en="Daikin (Discharge sensor)">Daikin (Sensor de descarga)[span_78](start_span)[span_78](end_span)</option>
+            </optgroup>
+            <optgroup label="15. Sensor Paralelo" data-en-label="15. Parallel Sensor">
+                <option value="paralelo_2.7k" data-en="Parallel sensor 2.7k">Sensor paralelo 2,7k[span_79](start_span)[span_79](end_span)</option>
+                <option value="paralelo_5k" data-en="Parallel sensor 5k">Sensor paralelo 5k[span_80](start_span)[span_80](end_span)</option>
+                <option value="paralelo_10k" data-en="Parallel sensor 10k">Sensor paralelo 10k[span_81](start_span)[span_81](end_span)</option>
+                <option value="paralelo_15k" data-en="Parallel sensor 15k">Sensor paralelo 15k[span_82](start_span)[span_82](end_span)</option>
+                <option value="paralelo_20k" data-en="Parallel sensor 20k">Sensor paralelo 20k[span_83](start_span)[span_83](end_span)</option>
+                <option value="paralelo_50k" data-en="Parallel sensor 50k">Sensor paralelo 50k[span_84](start_span)[span_84](end_span)</option>
+                <option value="paralelo_100k" data-en="Parallel sensor 100k">Sensor paralelo 100k[span_85](start_span)[span_85](end_span)</option>
+                <option value="paralelo_200k" data-en="Parallel sensor 200k">Sensor paralelo 200k[span_86](start_span)[span_86](end_span)</option>
+            </optgroup>
+            <optgroup label="16. Sensor Original" data-en-label="16. Original Sensor">
+                <option value="orig_2.7k" data-en="Original sensor 2.7k">Sensor original 2,7k[span_87](start_span)[span_87](end_span)</option>
+                <option value="orig_5k" data-en="Original sensor 5k">Sensor original 5k[span_88](start_span)[span_88](end_span)</option>
+                <option value="orig_10k" data-en="Original sensor 10k">Sensor original 10k[span_89](start_span)[span_89](end_span)</option>
+                <option value="orig_15k" data-en="Original sensor 15k">Sensor original 15k[span_90](start_span)[span_90](end_span)</option>
+                <option value="orig_20k" data-en="Original sensor 20k">Sensor original 20k[span_91](start_span)[span_91](end_span)</option>
+                <option value="orig_50k" data-en="Original sensor 50k">Sensor original 50k[span_92](start_span)[span_92](end_span)</option>
+                <option value="orig_100k" data-en="Original sensor 100k">Sensor original 100k[span_93](start_span)[span_93](end_span)</option>
+                <option value="orig_200k" data-en="Original sensor 200k">Sensor original 200k[span_94](start_span)[span_94](end_span)</option>
+            </optgroup>
+            <optgroup label="🔒 Configuração" data-en-label="🔒 Configuration">
+                <option value="config" data-en="Change / Restore Parameters">Alterar / Restaurar Parâmetros[span_95](start_span)[span_95](end_span)</option>
+            </optgroup>
+        </select>
+
+        <label data-pt="Resistência medida (kΩ):" data-en="Measured resistance (kΩ):">Resistência medida (kΩ):[span_96](start_span)[span_96](end_span)</label>
+        <input type="text" inputmode="decimal" id="res" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
+
+        <label data-pt="Temperatura medida (°C):" data-en="Measured temperature (°C):">Temperatura medida (°C):[span_97](start_span)[span_97](end_span)</label>
+        <input type="text" inputmode="decimal" id="temp" placeholder="Ex: 25" data-pt-placeholder="Ex: 25" data-en-placeholder="E.g: 25">
+
+        <button class="btn-principal" id="btn" data-pt="Analisar sensor" data-en="Analyze sensor">Analisar sensor[span_98](start_span)[span_98](end_span)</button>
+        <button class="btn-secundario" id="btn-fechar" data-pt="Limpar" data-en="Clear">Limpar[span_99](start_span)[span_99](end_span)</button>
+
+        <div id="resultado"></div>
+
+        <div id="areaEdicao">
+            <h4 style="margin-bottom: 15px; color: #856404;" data-pt="Configuração de Parâmetros" data-en="Parameter Configuration">Configuração de Parâmetros[span_100](start_span)[span_100](end_span)</h4>
+
+            <div id="camposEdicao" style="margin-top: 15px;">
+                <label data-pt="Selecione o sensor para alterar:" data-en="Select the sensor to edit:">Selecione o sensor para alterar:[span_101](start_span)[span_101](end_span)</label>
+                <select id="sensorEditar"></select>
+
+                <label data-pt="Novo valor R25 (kΩ):" data-en="New R25 value (kΩ):">Novo valor R25 (kΩ):[span_102](start_span)[span_102](end_span)</label>
+                <input type="number" id="novoR25" step="0.01">
+
+                <label data-pt="Nova constante Beta:" data-en="New Beta constant:">Nova constante Beta:[span_103](start_span)[span_103](end_span)</label>
+                <input type="number" id="novoBeta" step="1">
+
+                <label data-pt="Nova tolerância (%):" data-en="New tolerance (%):">Nova tolerância (%):[span_104](start_span)[span_104](end_span)</label>
+                <input type="number" id="novaTolerancia" step="0.1" min="0">
+
+                <button class="btn-alterar" id="btnSalvarAlteracao" data-pt="Salvar Alteração" data-en="Save Change">Salvar Alteração[span_105](start_span)[span_105](end_span)</button>
+                <button class="btn-restaurar" id="btnRestaurar" data-pt="Restaurar Valores Padrão" data-en="Restore Default Values">Restaurar Valores Padrão[span_106](start_span)[span_106](end_span)</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Reclim Cursos Assistência Técnica[span_107](start_span)[span_107](end_span)<br>
+        reclimsuporteapp@gmail.com[span_108](start_span)[span_108](end_span)<br>
+    </div>
+
+    <div class="modal-overlay" id="modalFabricante">
+        <div class="modal-box">
+            <h4 data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">Cadastrar Fabricante[span_109](start_span)[span_109](end_span)</h4>
+
+            <label data-pt="Fabricante já cadastrado (para editar ou remover):" data-en="Already registered manufacturer (to edit or remove):">Fabricante já cadastrado (para editar ou remover):[span_110](start_span)[span_110](end_span)</label>
+            <select id="selecionarFabricanteCadastrado">
+                <option value="" data-pt="-- Novo cadastro --" data-en="-- New registration --">-- Novo cadastro --[span_111](start_span)[span_111](end_span)</option>
+            </select>
+
+            <label data-pt=" Fabricante:" data-en="Manufacturer:"> Fabricante:[span_112](start_span)[span_112](end_span)</label>
+            <input type="text" id="inputNomeFabricante" placeholder="Ex: LG" data-pt-placeholder="Ex: LG" data-en-placeholder="E.g: LG">
+
+            <label data-pt="Beta:" data-en="Beta:"> Beta:[span_113](start_span)[span_113](end_span)</label>
+            <input type="number" id="inputBetaFabricante" placeholder="Ex: 3950" data-pt-placeholder="Ex: 3950" data-en-placeholder="E.g: 3950">
+
+            <label data-pt="Tolerância (%):" data-en="Tolerance (%):"> Tolerância (%):[span_114](start_span)[span_114](end_span)</label>
+            <input type="number" step="0.01" id="inputToleranciaFabricante" placeholder="Ex: 3,01" data-pt-placeholder="Ex: 3,01" data-en-placeholder="E.g: 3.01">
+
+            <label data-pt="Sensor amb. interno (R25 kΩ):" data-en="Indoor ambient sensor (R25 kΩ):">Sensor amb. interno (R25 kΩ):[span_115](start_span)[span_115](end_span)</label>
+            <input type="number" step="0.01" id="inputAmbInt" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
+
+            <label data-pt="Sensor de degelo (R25 kΩ):" data-en="Defrost sensor (R25 kΩ):">Sensor de degelo (R25 kΩ):[span_116](start_span)[span_116](end_span)</label>
+            <input type="number" step="0.01" id="inputDeg" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
+
+            <label data-pt="Sensor amb. externo (R25 kΩ):" data-en="Outdoor ambient sensor (R25 kΩ):">Sensor amb. externo (R25 kΩ):[span_117](start_span)[span_117](end_span)</label>
+            <input type="number" step="0.01" id="inputAmbExt" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
+
+            <label data-pt="Sensor do condensador (R25 kΩ):" data-en="f) Condenser sensor (R25 kΩ):">Sensor do condensador (R25 kΩ):[span_118](start_span)[span_118](end_span)</label>
+            <input type="number" step="0.01" id="inputCond" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
+
+            <label data-pt="Sensor de descarga (R25 kΩ):" data-en="Discharge sensor (R25 kΩ):">Sensor de descarga (R25 kΩ):[span_119](start_span)[span_119](end_span)</label>
+            <input type="number" step="0.01" id="inputDesc" placeholder="Ex: 50" data-pt-placeholder="Ex: 50" data-en-placeholder="E.g: 50">
+
+            <div class="btn-row">
+                <button class="btn-alterar" id="btnIncluirFabricante" data-pt="Incluir" data-en="Add">Incluir[span_120](start_span)[span_120](end_span)</button>
+                <button class="btn-row-remover btn-remover" id="btnRemoverFabricante" data-pt="Remover" data-en="Remove">Remover[span_121](start_span)[span_121](end_span)</button>
+                <button class="btn-restaurar" id="btnEditarFabricante" data-pt="Editar" data-en="Edit">Editar[span_122](start_span)[span_122](end_span)</button>
+                <button class="btn-principal" id="btnSalvarFabricante" style="margin-top:0;" data-pt="Salvar" data-en="Save">Salvar[span_123](start_span)[span_123](end_span)</button>
+            </div>
+            <button class="btn-secundario" id="btnFecharModalFabricante" data-pt="Fechar" data-en="Close">Fechar[span_124](start_span)[span_124](end_span)</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modalAjuda">
+        <div class="modal-box">
+            <h4 data-pt="Ajuda — Como Utilizar o aplicativo" data-en="Help — How to Use the app">Ajuda — Como Utilizar o aplicativo[span_125](start_span)[span_125](end_span)</h4>
+            <div class="ajuda-item" data-pt-html="<b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo." data-en-html="<b>1. Sensor identifier.</b> Analyzes an unknown sensor.<br>E.g: Enter its resistance in kΩ and temperature in °C."><b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo.[span_126](start_span)[span_126](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k." data-en-html="<b>2. Look up factory sensor.</b><br>E.g: LG → Indoor ambient sensor 1k and 25°C returns 5k."><b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k.[span_127](start_span)[span_127](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>3. Sensor paralelo.</b> Analisa os sensores que não são originais." data-en-html="<b>3. Parallel sensor.</b> Analyzes sensors that are not original."><b>3. Sensor paralelo.</b> Analisa os sensores que não são originais.[span_128](start_span)[span_128](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>4. Sensor Original.</b> Analisa os sensores de fábrica." data-en-html="<b>4. Original Sensor.</b> Analyzes factory sensors."><b>4. Sensor Original.</b> Analisa os sensores de fábrica.[span_129](start_span)[span_129](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo." data-en-html="<b>5. Select manufacturer.</b> Analyzes each original sensor according to its model."><b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo.[span_130](start_span)[span_130](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor." data-en-html="<b>6. Change / Restore Parameters.</b> Allows you to update the sensor's technical information."><b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor.[span_131](start_span)[span_131](end_span)</div>
+            <div class="ajuda-item" data-pt-html="<b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com" data-en-html="<b>7. About</b><br>Developer: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com"><b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com[span_132](start_span)[span_132](end_span)</div>
+            <button class="btn-secundario" id="btnFecharModalAjuda" data-pt="Fechar" data-en="Close">Fechar[span_133](start_span)[span_133](end_span)</button>
+        </div>
+    </div>
+
+    <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA -->
+    <script>
+        (function() {
+            const URL_DO_SERVIDOR = "https://seu-servidor-backend.com/api/verificar"; // Substituir futuramente pela URL real
+
+            function obterHWID() {
+                let hwid = localStorage.getItem('_hw_secure_id');
+                if (!hwid) {
+                    hwid = 'HW-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                    localStorage.setItem('_hw_secure_id', hwid);
+                }
+                return hwid;
+            }
+
+            async function checarLicencaNaNuvem() {
+                const hwid = obterHWID();
+                const statusLocal = localStorage.getItem('app_licenca_ativa');
+
+                // Se já estiver validado recentemente localmente, deixa passar para não travar sem internet
+                if (statusLocal === 'VALIDO') return;
+
+                try {
+                    // Exemplo de requisição para o seu futuro backend
+                    /*
+                    const resposta = await fetch(`${URL_DO_SERVIDOR}?hwid=${hwid}`);
+                    const dados = await resposta.json();
+                    if (dados.liberado) {
+                        localStorage.setItem('app_licenca_ativa', 'VALIDO');
+                    } else {
+                        bloquearApp(hwid);
+                    }
+                    */
+                } catch (e) {
+                    console.warn("Modo offline ou sem conexão com o servidor.");
+                }
+            }
+
+            function bloquearApp(hwid) {
+                document.getElementById('appMainContainer').innerHTML = `
+                    <div style="text-align:center; padding: 20px;">
+                        <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
+                        <p style="font-size:14px; color:#555; margin:15px 0;">Seu aplicativo precisa estar ativado para uso.</p>
+                        <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
+                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:15px;">
+                        <p style="font-size:13px; color:#007bff;">Entre em contato com o suporte para liberar o acesso: <br><b>reclimsuporteapp@gmail.com</b></p>
+                    </div>
+                `;
+            }
+
+            // Executa a checagem ao abrir
+            checarLicencaNaNuvem();
+        })();
+    </script>
+
+    <script>
+        (function() {
+            const configsOriginais = Object.freeze({
+                "lg_t1": {r25:5, beta:3986, tolerancia:3.01},
+                "lg_t2": {r25:10, beta:3972, tolerancia:3.01},
+                "lg_t3": {r25:200, beta:3500, tolerancia:10.01},
+                "tcl_amb": {r25:5, beta:3449, tolerancia:3.01},
+                "tcl_deg": {r25:5, beta:3449, tolerancia:3.01},
+                "tcl_cond": {r25:5, beta:3449, tolerancia:3.01},
+                "tcl_amb_ext": {r25:5, beta:3449, tolerancia:3.01},
+                "tcl_desc": {r25:20, beta:3922, tolerancia:3.01},
+                "agratto_amb_intq": {r25:15, beta:3950, tolerancia:3.01},
+                "agratto_amb_extq": {r25:15, beta:3950, tolerancia:3.01},
+                "agratto_degq": {r25:20, beta:3950, tolerancia:3.01},
+                "agratto_condq": {r25:20, beta:3950, tolerancia:3.01},
+                "agratto_descq": {r25:50, beta:3950, tolerancia:10.01},
+                "agratto_amb_intb": {r25:5, beta:3950, tolerancia:3.01},
+                "agratto_amb_extb": {r25:5, beta:3950, tolerancia:3.01},
+                "agratto_degb": {r25:5, beta:3950, tolerancia:3.01},
+                "agratto_condb": {r25:5, beta:3950, tolerancia:3.01},
+                "agratto_descb": {r25:20, beta:3950, tolerancia:10.01},
+                "sam_amb": {r25:10, beta:3356, tolerancia:3.01},
+                "sam_deg": {r25:10, beta:3356, tolerancia:3.01},
+                "sam_comp": {r25:200, beta:3356, tolerancia:10.01},
+                "sam_cond": {r25:10, beta:3356, tolerancia:3.01},
+                "sam_amb_ext": {r25:10, beta:3356, tolerancia:3.01},
+                "gree_amb_int": {r25:15, beta:3930, tolerancia:3.01},
+                "gree_amb_ext": {r25:15, beta:3930, tolerancia:3.01},
+                "gree_deg": {r25:20, beta:3930, tolerancia:3.01},
+                "gree_cond": {r25:20, beta:3930, tolerancia:3.01},
+                "gree_comp": {r25:50, beta:3925, tolerancia:10.01},
+                "mid_amb": {r25:10, beta:4100, tolerancia:3.01},
+                "mid_deg": {r25:10, beta:4100, tolerancia:3.01},
+                "mid_comp": {r25:50, beta:4100, tolerancia:10.01},
+                "mid_cond": {r25:10, beta:4100, tolerancia:3.01},
+                "mid_amb_ext": {r25:10, beta:4100, tolerancia:3.01},
+                "fuj_amb": {r25:10, beta:3944, tolerancia:3.01},
+                "fuj_deg": {r25:50, beta:4120, tolerancia:3.01},
+                "fuj_comp": {r25:50, beta:3944, tolerancia:10.01},
+                "fuj_amb_ext": {r25:10, beta:3944, tolerancia:3.01},
+                "fuj_cond": {r25:5, beta:3944, tolerancia:3.01},
+                "elgin_amb_int": {r25:15, beta:3950, tolerancia:3.01},
+                "elgin_deg": {r25:20, beta:3950, tolerancia:3.01},
+                "elgin_amb_ext": {r25:15, beta:3950, tolerancia:10.01},
+                "elgin_cond": {r25:20, beta:3950, tolerancia:10.01},
+                "elgin_desc": {r25:50, beta:3950, tolerancia:10.01},
+                "consul_amb_int": {r25:5, beta:3399, tolerancia:8},
+                "consul_amb_ext": {r25:5, beta:3399, tolerancia:8},
+                "consul_deg": {r25:5, beta:3399, tolerancia:8},
+                "consul_cond": {r25:5, beta:3399, tolerancia:8},
+                "consul_desc": {r25:50, beta:3961, tolerancia:15.8},
+                "electrolux_amb_int": {r25:15, beta:3930, tolerancia:3.01},
+                "electrolux_deg": {r25:20, beta:3950, tolerancia:3.01},
+                "electrolux_amb_ext": {r25:15, beta:3930, tolerancia:10.01},
+                "electrolux_cond": {r25:20, beta:3930, tolerancia:10.01},
+                "electrolux_desc": {r25:50, beta:3930, tolerancia:10.01},
+                "daikin_amb_int": {r25:10, beta:3950, tolerancia:3.01},
+                "daikin_deg": {r25:20, beta:3950, tolerancia:3.01},
+                "daikin_amb_ext": {r25:20, beta:3950, tolerancia:3.01},
+                "daikin_cond": {r25:20, beta:3950, tolerancia:3.01},
+                "daikin_desc": {r25:20, beta:3950, tolerancia:10.01},
+                "philco_amb_intq": {r25:10, beta:3950, tolerancia:3.01},
+                "philco_degq": {r25:10, beta:3950, tolerancia:3.01},
+                "philco_amb_extq": {r25:10, beta:3950, tolerancia:3.01},
+                "philco_condq": {r25:10, beta:3950, tolerancia:3.01},
+                "philco_descq": {r25:50, beta:3950, tolerancia:10.01},
+                "philco_amb_intb": {r25:5, beta:3950, tolerancia:3.01},
+                "philco_degb": {r25:5, beta:3950, tolerancia:3.01},
+                "philco_amb_extb": {r25:5, beta:3950, tolerancia:3.01},
+                "philco_condb": {r25:5, beta:3950, tolerancia:3.01},
+                "philco_descb": {r25:20, beta:3950, tolerancia:10.01},
+                "paralelo_2.7k": {r25:2.7, beta:3991, tolerancia:8.0},
+                "paralelo_5k": {r25:5, beta:3950, tolerancia:8.01},
+                "paralelo_10k": {r25:10, beta:3950, tolerancia:8.01},
+                "paralelo_15k": {r25:15, beta:3950, tolerancia:8.01},
+                "paralelo_20k": {r25:20, beta:3950, tolerancia:8.01},
+                "paralelo_50k": {r25:50, beta:3950, tolerancia:10.01},
+                "paralelo_100k": {r25:100, beta:3950, tolerancia:8.0},
+                "paralelo_200k": {r25:200, beta:3950, tolerancia:10.01},
+                "orig_2.7k": {r25:2.7, beta:3991, tolerancia:3.5},
+                "orig_5k": {r25:5, beta:3950, tolerancia:3.01},
+                "orig_10k": {r25:10, beta:3950, tolerancia:3.01},
+                "orig_15k": {r25:15, beta:3950, tolerancia:3.01},
+                "orig_20k": {r25:20, beta:3950, tolerancia:3.01},
+                "orig_50k": {r25:50, beta:3950, tolerancia:10.01},
+                "orig_100k": {r25:100, beta:3950, tolerancia:3.01},
+                "orig_200k": {r25:200, beta:3950, tolerancia:10.01}
+            });
+
+            const CHAVE_CONFIGS_SALVAS = "app_sens_configs_customizadas";
+
+            let configs = JSON.parse(JSON.stringify(configsOriginais));
+
+            (function carregarConfigsSalvas() {
+                try {
+                    const salvas = localStorage.getItem(CHAVE_CONFIGS_SALVAS);
+                    if (!salvas) return;
+                    const customizadas = JSON.parse(salvas);
+                    for (const chave in customizadas) {
+                        if (configs.hasOwnProperty(chave)) {
+                            configs[chave] = customizadas[chave];
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Não foi possível carregar configurações salvas:", e);
+                }
+            })();
+
+            // ===== Cadastro de Fabricantes (menu ⋮) =====
+            const CHAVE_FABRICANTES_CUSTOM = "app_sens_fabricantes_custom";
+            let fabricantesCustom = [];
+            const TIPOS_SENSOR = [
+                ['amb_int', 'Sensor amb. interno'],
+                ['deg', 'Sensor de degelo'],
+                ['amb_ext', 'Sensor amb. externo'],
+                ['cond', 'Sensor do condensador'],
+                ['desc', 'Sensor de descarga']
+            ];
+
+            function gerarIdFabricante(nome) {
+                const base = nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
+                return 'custom_' + base + '_' + Date.now();
+            }
+
+            function configsDoFabricante(f) {
+                const obj = {};
+                TIPOS_SENSOR.forEach(([tipo]) => {
+                    obj[f.id + '_' + tipo] = { r25: f.sensores[tipo], beta: f.beta, tolerancia: f.tolerancia };
+                });
+                return obj;
+            }
+
+            function adicionarConfigsFabricante(f) {
+                Object.assign(configs, configsDoFabricante(f));
+            }
+
+            function removerConfigsFabricante(f) {
+                TIPOS_SENSOR.forEach(([tipo]) => delete configs[f.id + '_' + tipo]);
+            }
+
+            function renderizarOptgroupsFabricantes() {
+                const selectEl = document.getElementById('tabela');
+                selectEl.querySelectorAll('optgroup[data-custom="1"]').forEach(og => og.remove());
+                const grupoConfig = selectEl.querySelector('optgroup[label^="🔒"]');
+                fabricantesCustom.forEach((f, idx) => {
+                    const numero = 17 + idx;
+                    const og = document.createElement('optgroup');
+                    og.label = numero + '. ' + f.nome;
+                    og.dataset.custom = '1';
+                    TIPOS_SENSOR.forEach(([tipo, label]) => {
+                        const opt = document.createElement('option');
+                        opt.value = f.id + '_' + tipo;
+                        opt.textContent = f.nome + ' (' + label + ')';
+                        og.appendChild(opt);
+                    });
+                    selectEl.insertBefore(og, grupoConfig);
+                });
+            }
+
+            function atualizarSelectFabricantesCadastrados() {
+                const sel = document.getElementById('selecionarFabricanteCadastrado');
+                const atual = sel.value;
+                sel.innerHTML = '<option value="">-- Novo cadastro --</option>';
+                fabricantesCustom.forEach(f => {
+                    const opt = document.createElement('option');
+                    opt.value = f.id;
+                    opt.textContent = f.nome;
+                    sel.appendChild(opt);
+                });
+                sel.value = fabricantesCustom.some(f => f.id === atual) ? atual : '';
+            }
+
+            function limparFormFabricante() {
+                ['inputNomeFabricante', 'inputBetaFabricante', 'inputToleranciaFabricante', 'inputAmbInt', 'inputDeg', 'inputAmbExt', 'inputCond', 'inputDesc'].forEach(id => document.getElementById(id).value = '');
+                document.getElementById('selecionarFabricanteCadastrado').value = '';
+            }
+
+            function lerFormFabricante() {
+                const nome = document.getElementById('inputNomeFabricante').value.trim();
+                const beta = parseInt(document.getElementById('inputBetaFabricante').value);
+                const toleranciaInput = parseFloat(document.getElementById('inputToleranciaFabricante').value);
+                const amb_int = parseFloat(document.getElementById('inputAmbInt').value);
+                const deg = parseFloat(document.getElementById('inputDeg').value);
+                const amb_ext = parseFloat(document.getElementById('inputAmbExt').value);
+                const cond = parseFloat(document.getElementById('inputCond').value);
+                const desc = parseFloat(document.getElementById('inputDesc').value);
+                if (!nome || isNaN(beta) || beta <= 0 || [amb_int, deg, amb_ext, cond, desc].some(v => isNaN(v) || v <= 0)) {
+                    alert("⚠️ Preencha todos os campos corretamente!");
+                    return null;
+                }
+                const tolerancia = !isNaN(toleranciaInput) && toleranciaInput >= 0 ? toleranciaInput : 3.01;
+                return { nome, beta, tolerancia, sensores: { amb_int, deg, amb_ext, cond, desc } };
+            }
+
+            document.getElementById('selecionarFabricanteCadastrado').addEventListener('change', function() {
+                const f = fabricantesCustom.find(x => x.id === this.value);
+                if (!f) { limparFormFabricante(); this.value = ''; return; }
+                document.getElementById('inputNomeFabricante').value = f.nome;
+                document.getElementById('inputBetaFabricante').value = f.beta;
+                document.getElementById('inputToleranciaFabricante').value = f.tolerancia !== undefined ? f.tolerancia : 3.01;
+                document.getElementById('inputAmbInt').value = f.sensores.amb_int;
+                document.getElementById('inputDeg').value = f.sensores.deg;
+                document.getElementById('inputAmbExt').value = f.sensores.amb_ext;
+                document.getElementById('inputCond').value = f.sensores.cond;
+                document.getElementById('inputDesc').value = f.sensores.desc;
+            });
+
+            document.getElementById('btnIncluirFabricante').addEventListener('click', function() {
+                const dados = lerFormFabricante();
+                if (!dados) return;
+                const f = { id: gerarIdFabricante(dados.nome), ...dados };
+                fabricantesCustom.push(f);
+                adicionarConfigsFabricante(f);
+                renderizarOptgroupsFabricantes();
+                atualizarSelectFabricantesCadastrados();
+                limparFormFabricante();
+                alert("✅ Fabricante incluído! Clique em Salvar para manter após fechar ou reiniciar o app.");
+            });
+
+            document.getElementById('btnEditarFabricante').addEventListener('click', function() {
+                const id = document.getElementById('selecionarFabricanteCadastrado').value;
+                if (!id) { alert("⚠️ Selecione um fabricante cadastrado para editar!"); return; }
+                const dados = lerFormFabricante();
+                if (!dados) return;
+                const idx = fabricantesCustom.findIndex(f => f.id === id);
+                if (idx === -1) return;
+                removerConfigsFabricante(fabricantesCustom[idx]);
+                fabricantesCustom[idx] = { id, ...dados };
+                adicionarConfigsFabricante(fabricantesCustom[idx]);
+                renderizarOptgroupsFabricantes();
+                atualizarSelectFabricantesCadastrados();
+                document.getElementById('selecionarFabricanteCadastrado').value = id;
+                alert("✅ Dados do fabricante atualizados! Clique em Salvar para manter após fechar ou reiniciar o app.");
+            });
+
+            document.getElementById('btnRemoverFabricante').addEventListener('click', function() {
+                const id = document.getElementById('selecionarFabricanteCadastrado').value;
+                if (!id) { alert("⚠️ Selecione um fabricante cadastrado para remover!"); return; }
+                if (!confirm("Deseja remover este fabricante cadastrado?")) return;
+                const idx = fabricantesCustom.findIndex(f => f.id === id);
+                if (idx === -1) return;
+                removerConfigsFabricante(fabricantesCustom[idx]);
+                fabricantesCustom.splice(idx, 1);
+                renderizarOptgroupsFabricantes();
+                atualizarSelectFabricantesCadastrados();
+                limparFormFabricante();
+                alert("✅ Fabricante removido e posições das opções atualizadas! Clique em Salvar para manter após fechar ou reiniciar o app.");
+            });
+
+            document.getElementById('btnSalvarFabricante').addEventListener('click', function() {
+                localStorage.setItem(CHAVE_FABRICANTES_CUSTOM, JSON.stringify(fabricantesCustom));
+                alert("✅ Cadastro salvo! As alterações não serão apagadas ao fechar ou reiniciar o app.");
+            });
+
+            (function carregarFabricantesCustom() {
+                try {
+                    const salvos = localStorage.getItem(CHAVE_FABRICANTES_CUSTOM);
+                    if (!salvos) return;
+                    fabricantesCustom = JSON.parse(salvos);
+                    fabricantesCustom.forEach(f => adicionarConfigsFabricante(f));
+                    renderizarOptgroupsFabricantes();
+                    atualizarSelectFabricantesCadastrados();
+                } catch (e) {
+                    console.warn("Não foi possível carregar fabricantes cadastrados:", e);
+                }
+            })();
+
+            // ===== Menu ⋮ e modais =====
+            const btnMenu = document.getElementById('btnMenu');
+            const menuDropdown = document.getElementById('menuDropdown');
+            const menuIdiomaToggle = document.getElementById('menuIdiomaToggle');
+            const menuSubIdioma = document.getElementById('menuSubIdioma');
+
+            btnMenu.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('aberto');
+            });
+
+            document.addEventListener('click', function() {
+                menuDropdown.classList.remove('aberto');
+                menuSubIdioma.classList.remove('aberto');
+            });
+
+            menuIdiomaToggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                menuSubIdioma.classList.toggle('aberto');
+            });
+
+            document.getElementById('menuCadastrarFabricante').addEventListener('click', function() {
+                menuDropdown.classList.remove('aberto');
+                menuSubIdioma.classList.remove('aberto');
+                atualizarSelectFabricantesCadastrados();
+                limparFormFabricante();
+                document.getElementById('modalFabricante').classList.add('aberto');
+            });
+
+            document.getElementById('menuAjuda').addEventListener('click', function() {
+                menuDropdown.classList.remove('aberto');
+                menuSubIdioma.classList.remove('aberto');
+                document.getElementById('modalAjuda').classList.add('aberto');
+            });
+
+            document.getElementById('btnFecharModalFabricante').addEventListener('click', function() {
+                document.getElementById('modalFabricante').classList.remove('aberto');
+            });
+            document.getElementById('btnFecharModalAjuda').addEventListener('click', function() {
+                document.getElementById('modalAjuda').classList.remove('aberto');
+            });
+
+            // ===== Idioma (Português / Inglês) Integrado no Menu (Padrão: Português) =====
+            const CHAVE_IDIOMA = "app_sens_idioma";
+            let idiomaAtual = localStorage.getItem(CHAVE_IDIOMA) || 'pt';
+
+            function aplicarIdioma(lang) {
+                idiomaAtual = lang;
+                localStorage.setItem(CHAVE_IDIOMA, lang);
+
+                document.querySelectorAll('[data-pt][data-en]').forEach(function(el) {
+                    el.textContent = lang === 'en' ? el.dataset.en : el.dataset.pt;
+                });
+                document.querySelectorAll('[data-pt-html][data-en-html]').forEach(function(el) {
+                    el.innerHTML = lang === 'en' ? el.dataset.enHtml : el.dataset.ptHtml;
+                });
+                document.querySelectorAll('[data-pt-placeholder][data-en-placeholder]').forEach(function(el) {
+                    el.placeholder = lang === 'en' ? el.dataset.enPlaceholder : el.dataset.ptPlaceholder;
+                });
+                document.querySelectorAll('#tabela option[data-en]').forEach(function(opt) {
+                    if (!opt.dataset.pt) opt.dataset.pt = opt.textContent;
+                    opt.textContent = lang === 'en' ? opt.dataset.en : opt.dataset.pt;
+                });
+                document.querySelectorAll('#tabela optgroup[data-en-label]').forEach(function(og) {
+                    if (!og.dataset.ptLabel) og.dataset.ptLabel = og.label;
+                    og.label = lang === 'en' ? og.dataset.enLabel : og.dataset.ptLabel;
+                });
+
+                document.getElementById('btnIdiomaPt').style.fontWeight = lang === 'pt' ? 'bold' : 'normal';
+                document.getElementById('btnIdiomaEn').style.fontWeight = lang === 'en' ? 'bold' : 'normal';
+            }
+
+            document.getElementById('btnIdiomaPt').addEventListener('click', function(e) {
+                e.stopPropagation();
+                aplicarIdioma('pt');
+                menuDropdown.classList.remove('aberto');
+                menuSubIdioma.classList.remove('aberto');
+            });
+            document.getElementById('btnIdiomaEn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                aplicarIdioma('en');
+                menuDropdown.classList.remove('aberto');
+                menuSubIdioma.classList.remove('aberto');
+            });
+
+            aplicarIdioma(idiomaAtual);
+
+            const referenciasIdentificador = [
+                {r25:2.7, beta:3991, tolerancia:3.01},
+                {r25:5, beta:3950, tolerancia:3.01},
+                {r25:10, beta:3950, tolerancia:3.01},
+                {r25:15, beta:3950, tolerancia:3.01},
+                {r25:20, beta:3950, tolerancia:3.01},
+                {r25:50, beta:3950, tolerancia:3.01},
+                {r25:100, beta:3950, tolerancia:3.01},
+                {r25:200, beta:3950, tolerancia:3.01}
+            ];
+
+            document.getElementById('tabela').addEventListener('change', function() {
+                const ehConfig = this.value === 'config';
+                document.getElementById('areaEdicao').style.display = ehConfig ? 'block' : 'none';
+                if (ehConfig) carregarSensores();
+            });
+
+            function carregarSensores() {
+                const select = document.getElementById('sensorEditar');
+                select.innerHTML = '';
+                for (const chave in configsOriginais) {
+                    const option = document.createElement('option');
+                    option.value = chave;
+                    option.textContent = chave;
+                    select.appendChild(option);
+                }
+                atualizarValores();
+            }
+
+            function atualizarValores() {
+                const sensor = document.getElementById('sensorEditar').value;
+                document.getElementById('novoR25').value = configs[sensor].r25;
+                document.getElementById('novoBeta').value = configs[sensor].beta;
+                document.getElementById('novaTolerancia').value = configs[sensor].tolerancia;
+            }
+
+            document.getElementById('sensorEditar').addEventListener('change', atualizarValores);
+
+            document.getElementById('btnSalvarAlteracao').addEventListener('click', function() {
+                const sensor = document.getElementById('sensorEditar').value;
+                const r25 = parseFloat(document.getElementById('novoR25').value);
+                const beta = parseInt(document.getElementById('novoBeta').value);
+                const tolerancia = parseFloat(document.getElementById('novaTolerancia').value);
+
+                if (isNaN(r25) || isNaN(beta) || isNaN(tolerancia) || r25 <= 0 || beta <= 0 || tolerancia < 0) {
+                    alert("⚠️ Valores inválidos!");
+                    return;
+                }
+
+                configs[sensor] = { r25, beta, tolerancia };
+                localStorage.setItem(CHAVE_CONFIGS_SALVAS, JSON.stringify(configs));
+                alert("✅ Alteração salva!");
+            });
+
+            document.getElementById('btnRestaurar').addEventListener('click', function() {
+                if (confirm("Deseja restaurar todos os valores originais?")) {
+                    configs = JSON.parse(JSON.stringify(configsOriginais));
+                    localStorage.removeItem(CHAVE_CONFIGS_SALVAS);
+                    alert("✅ Valores restaurados!");
+                }
+            });
+
+            (function() {
+                const campoTemp = document.getElementById('temp');
+                campoTemp.addEventListener('input', function() {
+                    let v = this.value.replace(',', '.');
+                    const negativo = v.trim().startsWith('-');
+                    v = v.replace(/[^0-9.]/g, '');
+                    const temPonto = v.includes('.');
+                    const partes = v.split('.');
+                    const inteiro = partes.shift();
+                    const decimal = partes.join('').slice(0, 2);
+                    v = inteiro + (temPonto ? '.' + decimal : '');
+                    this.value = (negativo ? '-' : '') + v;
+                });
+            })();
+
+            (function() {
+                const campoRes = document.getElementById('res');
+                campoRes.addEventListener('input', function() {
+                    let v = this.value.replace(',', '.');
+                    v = v.replace(/[^0-9.]/g, '');
+                    const temPonto = v.includes('.');
+                    const partes = v.split('.');
+                    const inteiro = partes.shift();
+                    const decimal = partes.join('').slice(0, 2);
+                    v = inteiro + (temPonto ? '.' + decimal : '');
+                    this.value = v;
+                });
+            })();
+
+            document.getElementById('btn').addEventListener('click', function() {
+                const tipo = document.getElementById('tabela').value;
+                const resistencia = parseFloat(document.getElementById('res').value);
+                const temperatura = parseFloat(document.getElementById('temp').value);
+                const resultado = document.getElementById('resultado');
+
+                if (isNaN(resistencia) || isNaN(temperatura) || resistencia <= 0) {
+                    alert("⚠️ Preencha corretamente os campos!");
+                    return;
+                }
+                if (temperatura < -100 || temperatura > 300) {
+                    alert("⚠️ Temperatura deve estar entre -100 e 300 °C!");
+                    return;
+                }
+
+                resultado.style.display = 'block';
+                const Tk = temperatura + 273.15;
+
+                if (tipo === 'identificar') {
+                    let melhor = null;
+                    let menorErro = Infinity;
+
+                    for (const ref of referenciasIdentificador) {
+                        const rIdeal = ref.r25 * Math.exp(ref.beta * ((1 / Tk) - (1 / 298.15)));
+                        const erro = Math.abs(((resistencia - rIdeal) / rIdeal) * 100);
+                        if (erro < menorErro) {
+                            menorErro = erro;
+                            melhor = { ...ref, rIdeal, erro };
+                        }
+                    }
+
+                    const minR = melhor.rIdeal * (1 - melhor.tolerancia / 100);
+                    const maxR = melhor.rIdeal * (1 + melhor.tolerancia / 100);
+
+                    resultado.innerHTML = `<strong>Sensor Identificado:</strong> ${melhor.r25} kΩ<br>
+                    <strong>Faixa aceitável:</strong> ${minR.toFixed(2)} kΩ a ${maxR.toFixed(2)} kΩ`;
+                } else {
+                    const cfg = configs[tipo];
+                    const rIdeal = cfg.r25 * Math.exp(cfg.beta * ((1 / Tk) - (1 / 298.15)));
+                    const tolerancia = cfg.tolerancia;
+                    const minR = rIdeal * (1 - tolerancia / 100);
+                    const maxR = rIdeal * (1 + tolerancia / 100);
+                    const erro = Math.abs(((resistencia - rIdeal) / rIdeal) * 100);
+                    const status = erro <= tolerancia ? "✅ DENTRO DA FAIXA" : "❌ FORA DA FAIXA";
+                    const cor = erro <= tolerancia ? "#28a745" : "#dc3545";
+
+                    const ehParaleloOuOriginal = tipo.startsWith('paralelo_') || tipo.startsWith('orig_');
+                    const ocultarStatus = !ehParaleloOuOriginal && resistencia === 1 && temperatura === 25;
+
+                    resultado.innerHTML = `<strong>Sensor Identificado:</strong> ${cfg.r25} kΩ<br>
+                    <strong>Faixa aceitável:</strong> ${minR.toFixed(2)} kΩ a ${maxR.toFixed(2)} kΩ` +
+                    (ocultarStatus ? '' : `<br><span style="color:${cor};font-weight:bold;">${status} ±${tolerancia.toFixed(2)}%</span>`);
+                }
+            });
+
+            document.getElementById('btn-fechar').addEventListener('click', function() {
+                document.getElementById('resultado').style.display = 'none';
+                document.getElementById('res').value = '';
+                document.getElementById('temp').value = '';
+            });
+        })();
+
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", function() {
+                navigator.serviceWorker.register("service-worker.js").catch(function(e) {
+                    console.warn("Falha ao registrar service worker:", e);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

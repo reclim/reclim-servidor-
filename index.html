@@ -59,7 +59,116 @@
 </head>
 <body>
 
-    <div class="container" id="appMainContainer">
+    <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA E PIX -->
+    <script>
+        (function() {
+            const URL_DO_SERVIDOR = "https://reclim-servidor.onrender.com";
+
+            function obterHWID() {
+                let hwid = localStorage.getItem('_hw_secure_id');
+                if (!hwid) {
+                    hwid = 'HW-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
+                    localStorage.setItem('_hw_secure_id', hwid);
+                }
+                return hwid;
+            }
+
+            async function checarLicencaNaNuvem() {
+                const hwid = obterHWID();
+                const statusLocal = localStorage.getItem('app_licenca_ativa');
+
+                if (statusLocal === 'VALIDO') {
+                    document.getElementById('appMainContainer').style.display = 'block';
+                    return;
+                }
+
+                try {
+                    const resposta = await fetch(`${URL_DO_SERVIDOR}/api/verificar-licenca?hwid=${hwid}`);
+                    const dados = await resposta.json();
+                    if (dados.liberado) {
+                        localStorage.setItem('app_licenca_ativa', 'VALIDO');
+                        document.getElementById('appMainContainer').style.display = 'block';
+                    } else {
+                        bloquearApp(hwid);
+                    }
+                } catch (e) {
+                    console.warn("Modo offline ou sem conexão com o servidor.");
+                    // Se estiver offline mas já validou antes, deixa passar. Senão, bloqueia por segurança.
+                    if (statusLocal === 'VALIDO') {
+                        document.getElementById('appMainContainer').style.display = 'block';
+                    } else {
+                        bloquearApp(hwid);
+                    }
+                }
+            }
+
+            function bloquearApp(hwid) {
+                document.body.innerHTML = `
+                    <div class="container" style="text-align:center; margin-top: 50px;">
+                        <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
+                        <p style="font-size:14px; color:#555; margin:10px 0;">Adquira sua licença de uso para desbloquear o aplicativo instantaneamente.</p>
+                        <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
+                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:10px; background:#f9f9f9;">
+                        
+                        <button class="btn-principal" id="btnComprarPix" style="background:#28a745; margin-top:5px;">Pagar Licença via Pix</button>
+                        <div id="areaPix" style="margin-top:15px; display:none; text-align:left; font-size:0.85em; background:#f8f9fa; padding:10px; border-radius:8px;">
+                            <p style="font-weight:bold; color:#333; margin-bottom:5px;">Escaneie ou copie o Pix:</p>
+                            <input type="text" id="copiaColaPix" readonly style="font-size:0.75em; margin-bottom:8px;">
+                            <button class="btn-secundario" id="btnCopiarPix" style="margin-top:0; padding:8px;">Copiar Código Pix</button>
+                        </div>
+
+                        <div class="footer" style="margin-top: 20px; border-top: none; padding-top: 0;">
+                            Reclim Cursos Assistência Técnica<br>
+                            reclimsuporteapp@gmail.com
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('btnComprarPix').addEventListener('click', async function() {
+                    const btn = this;
+                    btn.textContent = "Gerando Pix...";
+                    btn.disabled = true;
+
+                    try {
+                        const resposta = await fetch(`${URL_DO_SERVIDOR}/api/criar-pagamento`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ hwid: hwid })
+                        });
+                        const dados = await resposta.json();
+
+                        if (dados.sucesso && dados.qr_code) {
+                            btn.style.display = 'none';
+                            const areaPix = document.getElementById('areaPix');
+                            areaPix.style.display = 'block';
+                            document.getElementById('copiaColaPix').value = dados.qr_code;
+                        } else {
+                            alert("⚠️ Erro ao gerar Pix. Entre em contato com o suporte.");
+                            btn.textContent = "Pagar Licença via Pix";
+                            btn.disabled = false;
+                        }
+                    } catch (err) {
+                        alert("⚠️ Erro de conexão com o servidor de pagamento.");
+                        btn.textContent = "Pagar Licença via Pix";
+                        btn.disabled = false;
+                    }
+                });
+
+                document.getElementById('btnCopiarPix').addEventListener('click', function() {
+                    const inputPix = document.getElementById('copiaColaPix');
+                    inputPix.select();
+                    inputPix.setSelectionRange(0, 99999);
+                    navigator.clipboard.writeText(inputPix.value);
+                    alert("✅ Código Pix copiado com sucesso! Cole no aplicativo do seu banco para pagar.");
+                });
+            }
+
+            // Executa a checagem assim que a página carrega
+            window.addEventListener('DOMContentLoaded', checarLicencaNaNuvem);
+        })();
+    </script>
+
+    <div class="container" id="appMainContainer" style="display: none;">
         <div class="topo">
             <h3 data-pt="Analisador de Sensores NTC" data-en="NTC Sensor Analyzer">Analisador de Sensores NTC</h3>
             <button id="btnMenu" type="button">⋮</button>
@@ -294,101 +403,6 @@
             <button class="btn-secundario" id="btnFecharModalAjuda" data-pt="Fechar" data-en="Close">Fechar</button>
         </div>
     </div>
-
-    <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA E PIX -->
-    <script>
-        (function() {
-            const URL_DO_SERVIDOR = "https://reclim-servidor.onrender.com";
-
-            function obterHWID() {
-                let hwid = localStorage.getItem('_hw_secure_id');
-                if (!hwid) {
-                    hwid = 'HW-' + Math.random().toString(36).substring(2, 8).toUpperCase() + '-' + Date.now().toString(36).toUpperCase();
-                    localStorage.setItem('_hw_secure_id', hwid);
-                }
-                return hwid;
-            }
-
-            async function checarLicencaNaNuvem() {
-                const hwid = obterHWID();
-                const statusLocal = localStorage.getItem('app_licenca_ativa');
-
-                if (statusLocal === 'VALIDO') return;
-
-                try {
-                    const resposta = await fetch(`${URL_DO_SERVIDOR}/api/verificar-licenca?hwid=${hwid}`);
-                    const dados = await resposta.json();
-                    if (dados.liberado) {
-                        localStorage.setItem('app_licenca_ativa', 'VALIDO');
-                    } else {
-                        bloquearApp(hwid);
-                    }
-                } catch (e) {
-                    console.warn("Modo offline ou sem conexão com o servidor.");
-                }
-            }
-
-            function bloquearApp(hwid) {
-                document.getElementById('appMainContainer').innerHTML = `
-                    <div style="text-align:center; padding: 10px;">
-                        <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
-                        <p style="font-size:14px; color:#555; margin:10px 0;">Adquira sua licença de uso para desbloquear o aplicativo instantaneamente.</p>
-                        <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
-                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:10px; background:#f9f9f9;">
-                        
-                        <button class="btn-principal" id="btnComprarPix" style="background:#28a745; margin-top:5px;">Pagar Licença via Pix</button>
-                        <div id="areaPix" style="margin-top:15px; display:none; text-align:left; font-size:0.85em; background:#f8f9fa; padding:10px; border-radius:8px;">
-                            <p style="font-weight:bold; color:#333; margin-bottom:5px;">Escaneie ou copie o Pix:</p>
-                            <input type="text" id="copiaColaPix" readonly style="font-size:0.75em; margin-bottom:8px;">
-                            <button class="btn-secundario" id="btnCopiarPix" style="margin-top:0; padding:8px;">Copiar Código Pix</button>
-                        </div>
-
-                        <p style="font-size:12px; color:#007bff; margin-top:15px;">Dúvidas? Suporte: <b>reclimsuporteapp@gmail.com</b></p>
-                    </div>
-                `;
-
-                document.getElementById('btnComprarPix').addEventListener('click', async function() {
-                    const btn = this;
-                    btn.textContent = "Gerando Pix...";
-                    btn.disabled = true;
-
-                    try {
-                        const resposta = await fetch(`${URL_DO_SERVIDOR}/api/criar-pagamento`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ hwid: hwid })
-                        });
-                        const dados = await resposta.json();
-
-                        if (dados.sucesso && dados.qr_code) {
-                            btn.style.display = 'none';
-                            const areaPix = document.getElementById('areaPix');
-                            areaPix.style.display = 'block';
-                            document.getElementById('copiaColaPix').value = dados.qr_code;
-                        } else {
-                            alert("⚠️ Erro ao gerar Pix. Entre em contato com o suporte.");
-                            btn.textContent = "Pagar Licença via Pix";
-                            btn.disabled = false;
-                        }
-                    } catch (err) {
-                        alert("⚠️ Erro de conexão com o servidor de pagamento.");
-                        btn.textContent = "Pagar Licença via Pix";
-                        btn.disabled = false;
-                    }
-                });
-
-                document.getElementById('btnCopiarPix').addEventListener('click', function() {
-                    const inputPix = document.getElementById('copiaColaPix');
-                    inputPix.select();
-                    inputPix.setSelectionRange(0, 99999);
-                    navigator.clipboard.writeText(inputPix.value);
-                    alert("✅ Código Pix copiado com sucesso! Cole no aplicativo do seu banco para pagar.");
-                });
-            }
-
-            checarLicencaNaNuvem();
-        })();
-    </script>
 
     <script>
         (function() {

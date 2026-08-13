@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>Analisador de Sensores NTC</title>
     <meta name="theme-color" content="#007bff">
-    <meta name="description" content="Analisador de sensores NTC para ar-condicionado - Reclim Cursos e Assistência Técnica[span_2](start_span)[span_2](end_span)">
+    <meta name="description" content="Analisador de sensores NTC para ar-condicionado - Reclim Cursos e Assistência Técnica">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="icon-192.png">
     <link rel="apple-touch-icon" href="icon-192.png">
-    <style> 
+    <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; padding: 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .container { max-width: 450px; width: 100%; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 40px; }
@@ -61,244 +61,244 @@
 
     <div class="container" id="appMainContainer">
         <div class="topo">
-            <h3 data-pt="Analisador de Sensores NTC" data-en="NTC Sensor Analyzer">Analisador de Sensores NTC[span_3](start_span)[span_3](end_span)</h3>
+            <h3 data-pt="Analisador de Sensores NTC" data-en="NTC Sensor Analyzer">Analisador de Sensores NTC</h3>
             <button id="btnMenu" type="button">⋮</button>
             <div class="menu-dropdown" id="menuDropdown">
-                <div class="menu-item" id="menuCadastrarFabricante" data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">1. Cadastrar Fabricante[span_4](start_span)[span_4](end_span)</div>
-                <div class="menu-item" id="menuIdiomaToggle" data-pt="Idioma" data-en="Language">2. Idioma[span_5](start_span)[span_5](end_span)</div>
+                <div class="menu-item" id="menuCadastrarFabricante" data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">1. Cadastrar Fabricante</div>
+                <div class="menu-item" id="menuIdiomaToggle" data-pt="Idioma" data-en="Language">2. Idioma</div>
                 <div class="menu-submenu" id="menuSubIdioma">
-                    <div class="menu-subitem" id="btnIdiomaPt">Português[span_6](start_span)[span_6](end_span)</div>
-                    <div class="menu-subitem" id="btnIdiomaEn" data-pt="Inglês" data-en="English">Inglês[span_7](start_span)[span_7](end_span)</div>
+                    <div class="menu-subitem" id="btnIdiomaPt">Português</div>
+                    <div class="menu-subitem" id="btnIdiomaEn" data-pt="Inglês" data-en="English">Inglês</div>
                 </div>
-                <div class="menu-item" id="menuAjuda" data-pt="Ajuda" data-en="Help">3. Ajuda[span_8](start_span)[span_8](end_span)</div>
+                <div class="menu-item" id="menuAjuda" data-pt="Ajuda" data-en="Help">3. Ajuda</div>
             </div>
         </div>
 
-        <label data-pt="Fabricante:" data-en="Manufacturer:">Fabricante:[span_9](start_span)[span_9](end_span)</label>
+        <label data-pt="Fabricante:" data-en="Manufacturer:">Fabricante:</label>
         <select id="tabela">
             <optgroup label="🔍 Identificação" data-en-label="🔍 Identification">
-                <option value="identificar" data-en="Sensor identifier">Identificador de sensor[span_10](start_span)[span_10](end_span)</option>
+                <option value="identificar" data-en="Sensor identifier">Identificador de sensor</option>
             </optgroup>
             <optgroup label="1. LG" data-en-label="1. LG">
-                <option value="lg_t1" data-en="LG (Defrost or condenser sensor)">LG (Sensor de degelo ou condensador)[span_11](start_span)[span_11](end_span)</option>
-                <option value="lg_t2" data-en="LG (Indoor or outdoor ambient sensor)">LG (Sensor amb. interno ou externo)[span_12](start_span)[span_12](end_span)</option>
-                <option value="lg_t3" data-en="LG (Discharge sensor)">LG (Sensor de descarga)[span_13](start_span)[span_13](end_span)</option>
+                <option value="lg_t1" data-en="LG (Defrost or condenser sensor)">LG (Sensor de degelo ou condensador)</option>
+                <option value="lg_t2" data-en="LG (Indoor or outdoor ambient sensor)">LG (Sensor amb. interno ou externo)</option>
+                <option value="lg_t3" data-en="LG (Discharge sensor)">LG (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="2. TCL - TAC ou KOMECO - KAC" data-en-label="2. TCL - TAC or KOMECO - KAC">
-                <option value="tcl_amb" data-en="TCL or Komeco (Indoor ambient sensor)">TCL ou Komeco (Sensor amb. interno)[span_14](start_span)[span_14](end_span)</option>
-                <option value="tcl_deg" data-en="TCL or Komeco (Defrost sensor)">TCL ou Komeco (Sensor de degelo)[span_15](start_span)[span_15](end_span)</option>
-                <option value="tcl_cond" data-en="TCL or Komeco (Condenser sensor)">TCL ou Komeco (Sensor do condensador)[span_16](start_span)[span_16](end_span)</option>
-                <option value="tcl_amb_ext" data-en="TCL or Komeco (Outdoor ambient sensor)">TCL ou Komeco (Sensor amb. externo)[span_17](start_span)[span_17](end_span)</option>
-                <option value="tcl_desc" data-en="TCL or Komeco (Discharge sensor)">TCL ou Komeco (Sensor de descarga)[span_18](start_span)[span_18](end_span)</option>
+                <option value="tcl_amb" data-en="TCL or Komeco (Indoor ambient sensor)">TCL ou Komeco (Sensor amb. interno)</option>
+                <option value="tcl_deg" data-en="TCL or Komeco (Defrost sensor)">TCL ou Komeco (Sensor de degelo)</option>
+                <option value="tcl_cond" data-en="TCL or Komeco (Condenser sensor)">TCL ou Komeco (Sensor do condensador)</option>
+                <option value="tcl_amb_ext" data-en="TCL or Komeco (Outdoor ambient sensor)">TCL ou Komeco (Sensor amb. externo)</option>
+                <option value="tcl_desc" data-en="TCL or Komeco (Discharge sensor)">TCL ou Komeco (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="3. Agratto - Quadrada" data-en-label="3. Agratto - Square">
-                <option value="agratto_amb_intq" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)[span_19](start_span)[span_19](end_span)</option>
-                <option value="agratto_degq" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)[span_20](start_span)[span_20](end_span)</option>
-                <option value="agratto_descq" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)[span_21](start_span)[span_21](end_span)</option>
-                <option value="agratto_condq" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)[span_22](start_span)[span_22](end_span)</option>
-                <option value="agratto_amb_extq" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)[span_23](start_span)[span_23](end_span)</option>
+                <option value="agratto_amb_intq" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)</option>
+                <option value="agratto_degq" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)</option>
+                <option value="agratto_descq" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)</option>
+                <option value="agratto_condq" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)</option>
+                <option value="agratto_amb_extq" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="4. Agratto - Barril" data-en-label="4. Agratto - Barrel">
-                <option value="agratto_amb_intb" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)[span_24](start_span)[span_24](end_span)</option>
-                <option value="agratto_degb" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)[span_25](start_span)[span_25](end_span)</option>
-                <option value="agratto_descb" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)[span_26](start_span)[span_26](end_span)</option>
-                <option value="agratto_condb" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)[span_27](start_span)[span_27](end_span)</option>
-                <option value="agratto_amb_extb" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)[span_28](start_span)[span_28](end_span)</option>
+                <option value="agratto_amb_intb" data-en="Agratto (Indoor ambient sensor)">Agratto (Sensor amb. interno)</option>
+                <option value="agratto_degb" data-en="Agratto (Defrost sensor)">Agratto (Sensor de degelo)</option>
+                <option value="agratto_descb" data-en="Agratto (Discharge sensor)">Agratto (Sensor de descarga)</option>
+                <option value="agratto_condb" data-en="Agratto (Condenser sensor)">Agratto (Sensor do condensador)</option>
+                <option value="agratto_amb_extb" data-en="Agratto (Outdoor ambient sensor)">Agratto (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="5. Samsung" data-en-label="5. Samsung">
-                <option value="sam_amb" data-en="Samsung (Indoor ambient sensor)">Samsung (Sensor amb. interno)[span_29](start_span)[span_29](end_span)</option>
-                <option value="sam_deg" data-en="Samsung (Defrost sensor)">Samsung (Sensor de degelo)[span_30](start_span)[span_30](end_span)</option>
-                <option value="sam_comp" data-en="Samsung (Discharge sensor)">Samsung (Sensor de descarga)[span_31](start_span)[span_31](end_span)</option>
-                <option value="sam_cond" data-en="Samsung (Condenser sensor)">Samsung (Sensor do condensador)[span_32](start_span)[span_32](end_span)</option>
-                <option value="sam_amb_ext" data-en="Samsung (Outdoor ambient sensor)">Samsung (Sensor amb. externo)[span_33](start_span)[span_33](end_span)</option>
+                <option value="sam_amb" data-en="Samsung (Indoor ambient sensor)">Samsung (Sensor amb. interno)</option>
+                <option value="sam_deg" data-en="Samsung (Defrost sensor)">Samsung (Sensor de degelo)</option>
+                <option value="sam_comp" data-en="Samsung (Discharge sensor)">Samsung (Sensor de descarga)</option>
+                <option value="sam_cond" data-en="Samsung (Condenser sensor)">Samsung (Sensor do condensador)</option>
+                <option value="sam_amb_ext" data-en="Samsung (Outdoor ambient sensor)">Samsung (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="6. Gree" data-en-label="6. Gree">
-                <option value="gree_amb_int" data-en="Gree (Indoor ambient sensor)">Gree (Sensor amb. interno)[span_34](start_span)[span_34](end_span)</option>
-                <option value="gree_amb_ext" data-en="Gree (Outdoor ambient sensor)">Gree (Sensor amb. externo)[span_35](start_span)[span_35](end_span)</option>
-                <option value="gree_deg" data-en="Gree (Defrost sensor)">Gree (Sensor de degelo)[span_36](start_span)[span_36](end_span)</option>
-                <option value="gree_cond" data-en="Gree (Condenser sensor)">Gree (Sensor do condensador)[span_37](start_span)[span_37](end_span)</option>
-                <option value="gree_comp" data-en="Gree (Discharge sensor)">Gree (Sensor de descarga)[span_38](start_span)[span_38](end_span)</option>
+                <option value="gree_amb_int" data-en="Gree (Indoor ambient sensor)">Gree (Sensor amb. interno)</option>
+                <option value="gree_amb_ext" data-en="Gree (Outdoor ambient sensor)">Gree (Sensor amb. externo)</option>
+                <option value="gree_deg" data-en="Gree (Defrost sensor)">Gree (Sensor de degelo)</option>
+                <option value="gree_cond" data-en="Gree (Condenser sensor)">Gree (Sensor do condensador)</option>
+                <option value="gree_comp" data-en="Gree (Discharge sensor)">Gree (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="7. Midea" data-en-label="7. Midea">
-                <option value="mid_amb" data-en="Midea (Indoor ambient sensor)">Midea (Sensor amb. interno)[span_39](start_span)[span_39](end_span)</option>
-                <option value="mid_deg" data-en="Midea (Defrost sensor)">Midea (Sensor de degelo)[span_40](start_span)[span_40](end_span)</option>
-                <option value="mid_comp" data-en="Midea (Discharge sensor)">Midea (Sensor de descarga)[span_41](start_span)[span_41](end_span)</option>
-                <option value="mid_cond" data-en="Midea (Condenser sensor)">Midea (Sensor do condensador)[span_42](start_span)[span_42](end_span)</option>
-                <option value="mid_amb_ext" data-en="Midea (Outdoor ambient sensor)">Midea (Sensor amb. externo)[span_43](start_span)[span_43](end_span)</option>
+                <option value="mid_amb" data-en="Midea (Indoor ambient sensor)">Midea (Sensor amb. interno)</option>
+                <option value="mid_deg" data-en="Midea (Defrost sensor)">Midea (Sensor de degelo)</option>
+                <option value="mid_comp" data-en="Midea (Discharge sensor)">Midea (Sensor de descarga)</option>
+                <option value="mid_cond" data-en="Midea (Condenser sensor)">Midea (Sensor do condensador)</option>
+                <option value="mid_amb_ext" data-en="Midea (Outdoor ambient sensor)">Midea (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="8. Fujitsu" data-en-label="8. Fujitsu">
-                <option value="fuj_amb" data-en="Fujitsu (Indoor ambient sensor)">Fujitsu (Sensor amb. interno)[span_44](start_span)[span_44](end_span)</option>
-                <option value="fuj_deg" data-en="Fujitsu (Defrost sensor)">Fujitsu (Sensor de degelo)[span_45](start_span)[span_45](end_span)</option>
-                <option value="fuj_comp" data-en="Fujitsu (Discharge sensor)">Fujitsu (Sensor de descarga)[span_46](start_span)[span_46](end_span)</option>
-                <option value="fuj_amb_ext" data-en="Fujitsu (Outdoor ambient sensor)">Fujitsu (Sensor amb. externo)[span_47](start_span)[span_47](end_span)</option>
-                <option value="fuj_cond" data-en="Fujitsu (Condenser sensor)">Fujitsu (Sensor do condensador)[span_48](start_span)[span_48](end_span)</option>
+                <option value="fuj_amb" data-en="Fujitsu (Indoor ambient sensor)">Fujitsu (Sensor amb. interno)</option>
+                <option value="fuj_deg" data-en="Fujitsu (Defrost sensor)">Fujitsu (Sensor de degelo)</option>
+                <option value="fuj_comp" data-en="Fujitsu (Discharge sensor)">Fujitsu (Sensor de descarga)</option>
+                <option value="fuj_amb_ext" data-en="Fujitsu (Outdoor ambient sensor)">Fujitsu (Sensor amb. externo)</option>
+                <option value="fuj_cond" data-en="Fujitsu (Condenser sensor)">Fujitsu (Sensor do condensador)</option>
             </optgroup>
             <optgroup label="9. Elgin" data-en-label="9. Elgin">
-                <option value="elgin_amb_int" data-en="Elgin (Indoor ambient sensor)">Elgin (Sensor amb. interno)[span_49](start_span)[span_49](end_span)</option>
-                <option value="elgin_deg" data-en="Elgin (Defrost sensor)">Elgin (Sensor de degelo)[span_50](start_span)[span_50](end_span)</option>
-                <option value="elgin_desc" data-en="Elgin (Discharge sensor)">Elgin (Sensor de descarga)[span_51](start_span)[span_51](end_span)</option>
-                <option value="elgin_cond" data-en="Elgin (Condenser sensor)">Elgin (Sensor do condensador)[span_52](start_span)[span_52](end_span)</option>
-                <option value="elgin_amb_ext" data-en="Elgin (Outdoor ambient sensor)">Elgin (Sensor amb. externo)[span_53](start_span)[span_53](end_span)</option>
+                <option value="elgin_amb_int" data-en="Elgin (Indoor ambient sensor)">Elgin (Sensor amb. interno)</option>
+                <option value="elgin_deg" data-en="Elgin (Defrost sensor)">Elgin (Sensor de degelo)</option>
+                <option value="elgin_desc" data-en="Elgin (Discharge sensor)">Elgin (Sensor de descarga)</option>
+                <option value="elgin_cond" data-en="Elgin (Condenser sensor)">Elgin (Sensor do condensador)</option>
+                <option value="elgin_amb_ext" data-en="Elgin (Outdoor ambient sensor)">Elgin (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="10. Consul" data-en-label="10. Consul">
-                <option value="consul_amb_int" data-en="Consul (Indoor ambient sensor)">Consul (Sensor amb. interno)[span_54](start_span)[span_54](end_span)</option>
-                <option value="consul_deg" data-en="Consul (Defrost sensor)">Consul (Sensor de degelo)[span_55](start_span)[span_55](end_span)</option>
-                <option value="consul_desc" data-en="Consul (Discharge sensor)">Consul (Sensor de descarga)[span_56](start_span)[span_56](end_span)</option>
-                <option value="consul_cond" data-en="Consul (Condenser sensor)">Consul (Sensor do condensador)[span_57](start_span)[span_57](end_span)</option>
-                <option value="consul_amb_ext" data-en="Consul (Outdoor ambient sensor)">Consul (Sensor amb. externo)[span_58](start_span)[span_58](end_span)</option>
+                <option value="consul_amb_int" data-en="Consul (Indoor ambient sensor)">Consul (Sensor amb. interno)</option>
+                <option value="consul_deg" data-en="Consul (Defrost sensor)">Consul (Sensor de degelo)</option>
+                <option value="consul_desc" data-en="Consul (Discharge sensor)">Consul (Sensor de descarga)</option>
+                <option value="consul_cond" data-en="Consul (Condenser sensor)">Consul (Sensor do condensador)</option>
+                <option value="consul_amb_ext" data-en="Consul (Outdoor ambient sensor)">Consul (Sensor amb. externo)</option>
             </optgroup>
             <optgroup label="11. Philco - Quadrada" data-en-label="11. Philco - Square">
-                <option value="philco_amb_intq" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)[span_59](start_span)[span_59](end_span)</option>
-                <option value="philco_degq" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)[span_60](start_span)[span_60](end_span)</option>
-                <option value="philco_amb_extq" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)[span_61](start_span)[span_61](end_span)</option>
-                <option value="philco_condq" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)[span_62](start_span)[span_62](end_span)</option>
-                <option value="philco_descq" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)[span_63](start_span)[span_63](end_span)</option>
+                <option value="philco_amb_intq" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)</option>
+                <option value="philco_degq" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)</option>
+                <option value="philco_amb_extq" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)</option>
+                <option value="philco_condq" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)</option>
+                <option value="philco_descq" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="12. Philco - Barril" data-en-label="12. Philco - Barrel">
-                <option value="philco_amb_intb" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)[span_64](start_span)[span_64](end_span)</option>
-                <option value="philco_degb" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)[span_65](start_span)[span_65](end_span)</option>
-                <option value="philco_amb_extb" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)[span_66](start_span)[span_66](end_span)</option>
-                <option value="philco_condb" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)[span_67](start_span)[span_67](end_span)</option>
-                <option value="philco_descb" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)[span_68](start_span)[span_68](end_span)</option>
+                <option value="philco_amb_intb" data-en="Philco (Indoor ambient sensor)">Philco (Sensor amb. interno)</option>
+                <option value="philco_degb" data-en="Philco (Defrost sensor)">Philco (Sensor de degelo)</option>
+                <option value="philco_amb_extb" data-en="Philco (Outdoor ambient sensor)">Philco (Sensor amb. externo)</option>
+                <option value="philco_condb" data-en="Philco (Condenser sensor)">Philco (Sensor do condensador)</option>
+                <option value="philco_descb" data-en="Philco (Discharge sensor)">Philco (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="13. Electrolux" data-en-label="13. Electrolux">
-                <option value="electrolux_amb_int" data-en="Electrolux (Indoor ambient sensor)">Electrolux (Sensor amb. interno)[span_69](start_span)[span_69](end_span)</option>
-                <option value="electrolux_deg" data-en="Electrolux (Defrost sensor)">Electrolux (Sensor de degelo)[span_70](start_span)[span_70](end_span)</option>
-                <option value="electrolux_amb_ext" data-en="Electrolux (Outdoor ambient sensor)">Electrolux (Sensor amb. externo)[span_71](start_span)[span_71](end_span)</option>
-                <option value="electrolux_cond" data-en="Electrolux (Condenser sensor)">Electrolux (Sensor do condensador)[span_72](start_span)[span_72](end_span)</option>
-                <option value="electrolux_desc" data-en="Electrolux (Discharge sensor)">Electrolux (Sensor de descarga)[span_73](start_span)[span_73](end_span)</option>
+                <option value="electrolux_amb_int" data-en="Electrolux (Indoor ambient sensor)">Electrolux (Sensor amb. interno)</option>
+                <option value="electrolux_deg" data-en="Electrolux (Defrost sensor)">Electrolux (Sensor de degelo)</option>
+                <option value="electrolux_amb_ext" data-en="Electrolux (Outdoor ambient sensor)">Electrolux (Sensor amb. externo)</option>
+                <option value="electrolux_cond" data-en="Electrolux (Condenser sensor)">Electrolux (Sensor do condensador)</option>
+                <option value="electrolux_desc" data-en="Electrolux (Discharge sensor)">Electrolux (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="14. Daikin" data-en-label="14. Daikin">
-                <option value="daikin_amb_int" data-en="Daikin (Indoor ambient sensor)">Daikin (Sensor amb. interno)[span_74](start_span)[span_74](end_span)</option>
-                <option value="daikin_deg" data-en="Daikin (Defrost sensor)">Daikin (Sensor de degelo)[span_75](start_span)[span_75](end_span)</option>
-                <option value="daikin_amb_ext" data-en="Daikin (Outdoor ambient sensor)">Daikin (Sensor amb. externo)[span_76](start_span)[span_76](end_span)</option>
-                <option value="daikin_cond" data-en="Daikin (Condenser sensor)">Daikin (Sensor do condensador)[span_77](start_span)[span_77](end_span)</option>
-                <option value="daikin_desc" data-en="Daikin (Discharge sensor)">Daikin (Sensor de descarga)[span_78](start_span)[span_78](end_span)</option>
+                <option value="daikin_amb_int" data-en="Daikin (Indoor ambient sensor)">Daikin (Sensor amb. interno)</option>
+                <option value="daikin_deg" data-en="Daikin (Defrost sensor)">Daikin (Sensor de degelo)</option>
+                <option value="daikin_amb_ext" data-en="Daikin (Outdoor ambient sensor)">Daikin (Sensor amb. externo)</option>
+                <option value="daikin_cond" data-en="Daikin (Condenser sensor)">Daikin (Sensor do condensador)</option>
+                <option value="daikin_desc" data-en="Daikin (Discharge sensor)">Daikin (Sensor de descarga)</option>
             </optgroup>
             <optgroup label="15. Sensor Paralelo" data-en-label="15. Parallel Sensor">
-                <option value="paralelo_2.7k" data-en="Parallel sensor 2.7k">Sensor paralelo 2,7k[span_79](start_span)[span_79](end_span)</option>
-                <option value="paralelo_5k" data-en="Parallel sensor 5k">Sensor paralelo 5k[span_80](start_span)[span_80](end_span)</option>
-                <option value="paralelo_10k" data-en="Parallel sensor 10k">Sensor paralelo 10k[span_81](start_span)[span_81](end_span)</option>
-                <option value="paralelo_15k" data-en="Parallel sensor 15k">Sensor paralelo 15k[span_82](start_span)[span_82](end_span)</option>
-                <option value="paralelo_20k" data-en="Parallel sensor 20k">Sensor paralelo 20k[span_83](start_span)[span_83](end_span)</option>
-                <option value="paralelo_50k" data-en="Parallel sensor 50k">Sensor paralelo 50k[span_84](start_span)[span_84](end_span)</option>
-                <option value="paralelo_100k" data-en="Parallel sensor 100k">Sensor paralelo 100k[span_85](start_span)[span_85](end_span)</option>
-                <option value="paralelo_200k" data-en="Parallel sensor 200k">Sensor paralelo 200k[span_86](start_span)[span_86](end_span)</option>
+                <option value="paralelo_2.7k" data-en="Parallel sensor 2.7k">Sensor paralelo 2,7k</option>
+                <option value="paralelo_5k" data-en="Parallel sensor 5k">Sensor paralelo 5k</option>
+                <option value="paralelo_10k" data-en="Parallel sensor 10k">Sensor paralelo 10k</option>
+                <option value="paralelo_15k" data-en="Parallel sensor 15k">Sensor paralelo 15k</option>
+                <option value="paralelo_20k" data-en="Parallel sensor 20k">Sensor paralelo 20k</option>
+                <option value="paralelo_50k" data-en="Parallel sensor 50k">Sensor paralelo 50k</option>
+                <option value="paralelo_100k" data-en="Parallel sensor 100k">Sensor paralelo 100k</option>
+                <option value="paralelo_200k" data-en="Parallel sensor 200k">Sensor paralelo 200k</option>
             </optgroup>
             <optgroup label="16. Sensor Original" data-en-label="16. Original Sensor">
-                <option value="orig_2.7k" data-en="Original sensor 2.7k">Sensor original 2,7k[span_87](start_span)[span_87](end_span)</option>
-                <option value="orig_5k" data-en="Original sensor 5k">Sensor original 5k[span_88](start_span)[span_88](end_span)</option>
-                <option value="orig_10k" data-en="Original sensor 10k">Sensor original 10k[span_89](start_span)[span_89](end_span)</option>
-                <option value="orig_15k" data-en="Original sensor 15k">Sensor original 15k[span_90](start_span)[span_90](end_span)</option>
-                <option value="orig_20k" data-en="Original sensor 20k">Sensor original 20k[span_91](start_span)[span_91](end_span)</option>
-                <option value="orig_50k" data-en="Original sensor 50k">Sensor original 50k[span_92](start_span)[span_92](end_span)</option>
-                <option value="orig_100k" data-en="Original sensor 100k">Sensor original 100k[span_93](start_span)[span_93](end_span)</option>
-                <option value="orig_200k" data-en="Original sensor 200k">Sensor original 200k[span_94](start_span)[span_94](end_span)</option>
+                <option value="orig_2.7k" data-en="Original sensor 2.7k">Sensor original 2,7k</option>
+                <option value="orig_5k" data-en="Original sensor 5k">Sensor original 5k</option>
+                <option value="orig_10k" data-en="Original sensor 10k">Sensor original 10k</option>
+                <option value="orig_15k" data-en="Original sensor 15k">Sensor original 15k</option>
+                <option value="orig_20k" data-en="Original sensor 20k">Sensor original 20k</option>
+                <option value="orig_50k" data-en="Original sensor 50k">Sensor original 50k</option>
+                <option value="orig_100k" data-en="Original sensor 100k">Sensor original 100k</option>
+                <option value="orig_200k" data-en="Original sensor 200k">Sensor original 200k</option>
             </optgroup>
             <optgroup label="🔒 Configuração" data-en-label="🔒 Configuration">
-                <option value="config" data-en="Change / Restore Parameters">Alterar / Restaurar Parâmetros[span_95](start_span)[span_95](end_span)</option>
+                <option value="config" data-en="Change / Restore Parameters">Alterar / Restaurar Parâmetros</option>
             </optgroup>
         </select>
 
-        <label data-pt="Resistência medida (kΩ):" data-en="Measured resistance (kΩ):">Resistência medida (kΩ):[span_96](start_span)[span_96](end_span)</label>
+        <label data-pt="Resistência medida (kΩ):" data-en="Measured resistance (kΩ):">Resistência medida (kΩ):</label>
         <input type="text" inputmode="decimal" id="res" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
 
-        <label data-pt="Temperatura medida (°C):" data-en="Measured temperature (°C):">Temperatura medida (°C):[span_97](start_span)[span_97](end_span)</label>
+        <label data-pt="Temperatura medida (°C):" data-en="Measured temperature (°C):">Temperatura medida (°C):</label>
         <input type="text" inputmode="decimal" id="temp" placeholder="Ex: 25" data-pt-placeholder="Ex: 25" data-en-placeholder="E.g: 25">
 
-        <button class="btn-principal" id="btn" data-pt="Analisar sensor" data-en="Analyze sensor">Analisar sensor[span_98](start_span)[span_98](end_span)</button>
-        <button class="btn-secundario" id="btn-fechar" data-pt="Limpar" data-en="Clear">Limpar[span_99](start_span)[span_99](end_span)</button>
+        <button class="btn-principal" id="btn" data-pt="Analisador de sensor" data-en="Analyze sensor">Analisador de sensor</button>
+        <button class="btn-secundario" id="btn-fechar" data-pt="Limpar" data-en="Clear">Limpar</button>
 
         <div id="resultado"></div>
 
         <div id="areaEdicao">
-            <h4 style="margin-bottom: 15px; color: #856404;" data-pt="Configuração de Parâmetros" data-en="Parameter Configuration">Configuração de Parâmetros[span_100](start_span)[span_100](end_span)</h4>
+            <h4 style="margin-bottom: 15px; color: #856404;" data-pt="Configuração de Parâmetros" data-en="Parameter Configuration">Configuração de Parâmetros</h4>
 
             <div id="camposEdicao" style="margin-top: 15px;">
-                <label data-pt="Selecione o sensor para alterar:" data-en="Select the sensor to edit:">Selecione o sensor para alterar:[span_101](start_span)[span_101](end_span)</label>
+                <label data-pt="Selecione o sensor para alterar:" data-en="Select the sensor to edit:">Selecione o sensor para alterar:</label>
                 <select id="sensorEditar"></select>
 
-                <label data-pt="Novo valor R25 (kΩ):" data-en="New R25 value (kΩ):">Novo valor R25 (kΩ):[span_102](start_span)[span_102](end_span)</label>
+                <label data-pt="Novo valor R25 (kΩ):" data-en="New R25 value (kΩ):">Novo valor R25 (kΩ):</label>
                 <input type="number" id="novoR25" step="0.01">
 
-                <label data-pt="Nova constante Beta:" data-en="New Beta constant:">Nova constante Beta:[span_103](start_span)[span_103](end_span)</label>
+                <label data-pt="Nova constante Beta:" data-en="New Beta constant:">Nova constante Beta:</label>
                 <input type="number" id="novoBeta" step="1">
 
-                <label data-pt="Nova tolerância (%):" data-en="New tolerance (%):">Nova tolerância (%):[span_104](start_span)[span_104](end_span)</label>
+                <label data-pt="Nova tolerância (%):" data-en="New tolerance (%):">Nova tolerância (%):</label>
                 <input type="number" id="novaTolerancia" step="0.1" min="0">
 
-                <button class="btn-alterar" id="btnSalvarAlteracao" data-pt="Salvar Alteração" data-en="Save Change">Salvar Alteração[span_105](start_span)[span_105](end_span)</button>
-                <button class="btn-restaurar" id="btnRestaurar" data-pt="Restaurar Valores Padrão" data-en="Restore Default Values">Restaurar Valores Padrão[span_106](start_span)[span_106](end_span)</button>
+                <button class="btn-alterar" id="btnSalvarAlteracao" data-pt="Salvar Alteração" data-en="Save Change">Salvar Alteração</button>
+                <button class="btn-restaurar" id="btnRestaurar" data-pt="Restaurar Valores Padrão" data-en="Restore Default Values">Restaurar Valores Padrão</button>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        Reclim Cursos Assistência Técnica[span_107](start_span)[span_107](end_span)<br>
-        reclimsuporteapp@gmail.com[span_108](start_span)[span_108](end_span)<br>
+        Reclim Cursos Assistência Técnica<br>
+        reclimsuporteapp@gmail.com<br>
     </div>
 
     <div class="modal-overlay" id="modalFabricante">
         <div class="modal-box">
-            <h4 data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">Cadastrar Fabricante[span_109](start_span)[span_109](end_span)</h4>
+            <h4 data-pt="Cadastrar Fabricante" data-en="Register Manufacturer">Cadastrar Fabricante</h4>
 
-            <label data-pt="Fabricante já cadastrado (para editar ou remover):" data-en="Already registered manufacturer (to edit or remove):">Fabricante já cadastrado (para editar ou remover):[span_110](start_span)[span_110](end_span)</label>
+            <label data-pt="Fabricante já cadastrado (para editar ou remover):" data-en="Already registered manufacturer (to edit or remove):">Fabricante já cadastrado (para editar ou remover):</label>
             <select id="selecionarFabricanteCadastrado">
-                <option value="" data-pt="-- Novo cadastro --" data-en="-- New registration --">-- Novo cadastro --[span_111](start_span)[span_111](end_span)</option>
+                <option value="" data-pt="-- Novo cadastro --" data-en="-- New registration --">-- Novo cadastro --</option>
             </select>
 
-            <label data-pt=" Fabricante:" data-en="Manufacturer:"> Fabricante:[span_112](start_span)[span_112](end_span)</label>
+            <label data-pt=" Fabricante:" data-en="Manufacturer:"> Fabricante:</label>
             <input type="text" id="inputNomeFabricante" placeholder="Ex: LG" data-pt-placeholder="Ex: LG" data-en-placeholder="E.g: LG">
 
-            <label data-pt="Beta:" data-en="Beta:"> Beta:[span_113](start_span)[span_113](end_span)</label>
+            <label data-pt="Beta:" data-en="Beta:"> Beta:</label>
             <input type="number" id="inputBetaFabricante" placeholder="Ex: 3950" data-pt-placeholder="Ex: 3950" data-en-placeholder="E.g: 3950">
 
-            <label data-pt="Tolerância (%):" data-en="Tolerance (%):"> Tolerância (%):[span_114](start_span)[span_114](end_span)</label>
+            <label data-pt="Tolerância (%):" data-en="Tolerance (%):"> Tolerância (%):</label>
             <input type="number" step="0.01" id="inputToleranciaFabricante" placeholder="Ex: 3,01" data-pt-placeholder="Ex: 3,01" data-en-placeholder="E.g: 3.01">
 
-            <label data-pt="Sensor amb. interno (R25 kΩ):" data-en="Indoor ambient sensor (R25 kΩ):">Sensor amb. interno (R25 kΩ):[span_115](start_span)[span_115](end_span)</label>
+            <label data-pt="Sensor amb. interno (R25 kΩ):" data-en="Indoor ambient sensor (R25 kΩ):">Sensor amb. interno (R25 kΩ):</label>
             <input type="number" step="0.01" id="inputAmbInt" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
 
-            <label data-pt="Sensor de degelo (R25 kΩ):" data-en="Defrost sensor (R25 kΩ):">Sensor de degelo (R25 kΩ):[span_116](start_span)[span_116](end_span)</label>
+            <label data-pt="Sensor de degelo (R25 kΩ):" data-en="Defrost sensor (R25 kΩ):">Sensor de degelo (R25 kΩ):</label>
             <input type="number" step="0.01" id="inputDeg" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
 
-            <label data-pt="Sensor amb. externo (R25 kΩ):" data-en="Outdoor ambient sensor (R25 kΩ):">Sensor amb. externo (R25 kΩ):[span_117](start_span)[span_117](end_span)</label>
+            <label data-pt="Sensor amb. externo (R25 kΩ):" data-en="Outdoor ambient sensor (R25 kΩ):">Sensor amb. externo (R25 kΩ):</label>
             <input type="number" step="0.01" id="inputAmbExt" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
 
-            <label data-pt="Sensor do condensador (R25 kΩ):" data-en="f) Condenser sensor (R25 kΩ):">Sensor do condensador (R25 kΩ):[span_118](start_span)[span_118](end_span)</label>
+            <label data-pt="Sensor do condensador (R25 kΩ):" data-en="Condenser sensor (R25 kΩ):">Sensor do condensador (R25 kΩ):</label>
             <input type="number" step="0.01" id="inputCond" placeholder="Ex: 10" data-pt-placeholder="Ex: 10" data-en-placeholder="E.g: 10">
 
-            <label data-pt="Sensor de descarga (R25 kΩ):" data-en="Discharge sensor (R25 kΩ):">Sensor de descarga (R25 kΩ):[span_119](start_span)[span_119](end_span)</label>
+            <label data-pt="Sensor de descarga (R25 kΩ):" data-en="Discharge sensor (R25 kΩ):">Sensor de descarga (R25 kΩ):</label>
             <input type="number" step="0.01" id="inputDesc" placeholder="Ex: 50" data-pt-placeholder="Ex: 50" data-en-placeholder="E.g: 50">
 
             <div class="btn-row">
-                <button class="btn-alterar" id="btnIncluirFabricante" data-pt="Incluir" data-en="Add">Incluir[span_120](start_span)[span_120](end_span)</button>
-                <button class="btn-row-remover btn-remover" id="btnRemoverFabricante" data-pt="Remover" data-en="Remove">Remover[span_121](start_span)[span_121](end_span)</button>
-                <button class="btn-restaurar" id="btnEditarFabricante" data-pt="Editar" data-en="Edit">Editar[span_122](start_span)[span_122](end_span)</button>
-                <button class="btn-principal" id="btnSalvarFabricante" style="margin-top:0;" data-pt="Salvar" data-en="Save">Salvar[span_123](start_span)[span_123](end_span)</button>
+                <button class="btn-alterar" id="btnIncluirFabricante" data-pt="Incluir" data-en="Add">Incluir</button>
+                <button class="btn-row-remover btn-remover" id="btnRemoverFabricante" data-pt="Remover" data-en="Remove">Remover</button>
+                <button class="btn-restaurar" id="btnEditarFabricante" data-pt="Editar" data-en="Edit">Editar</button>
+                <button class="btn-principal" id="btnSalvarFabricante" style="margin-top:0;" data-pt="Salvar" data-en="Save">Salvar</button>
             </div>
-            <button class="btn-secundario" id="btnFecharModalFabricante" data-pt="Fechar" data-en="Close">Fechar[span_124](start_span)[span_124](end_span)</button>
+            <button class="btn-secundario" id="btnFecharModalFabricante" data-pt="Fechar" data-en="Close">Fechar</button>
         </div>
     </div>
 
     <div class="modal-overlay" id="modalAjuda">
         <div class="modal-box">
-            <h4 data-pt="Ajuda — Como Utilizar o aplicativo" data-en="Help — How to Use the app">Ajuda — Como Utilizar o aplicativo[span_125](start_span)[span_125](end_span)</h4>
-            <div class="ajuda-item" data-pt-html="<b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo." data-en-html="<b>1. Sensor identifier.</b> Analyzes an unknown sensor.<br>E.g: Enter its resistance in kΩ and temperature in °C."><b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo.[span_126](start_span)[span_126](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k." data-en-html="<b>2. Look up factory sensor.</b><br>E.g: LG → Indoor ambient sensor 1k and 25°C returns 5k."><b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k.[span_127](start_span)[span_127](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>3. Sensor paralelo.</b> Analisa os sensores que não são originais." data-en-html="<b>3. Parallel sensor.</b> Analyzes sensors that are not original."><b>3. Sensor paralelo.</b> Analisa os sensores que não são originais.[span_128](start_span)[span_128](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>4. Sensor Original.</b> Analisa os sensores de fábrica." data-en-html="<b>4. Original Sensor.</b> Analyzes factory sensors."><b>4. Sensor Original.</b> Analisa os sensores de fábrica.[span_129](start_span)[span_129](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo." data-en-html="<b>5. Select manufacturer.</b> Analyzes each original sensor according to its model."><b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo.[span_130](start_span)[span_130](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor." data-en-html="<b>6. Change / Restore Parameters.</b> Allows you to update the sensor's technical information."><b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor.[span_131](start_span)[span_131](end_span)</div>
-            <div class="ajuda-item" data-pt-html="<b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com" data-en-html="<b>7. About</b><br>Developer: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com"><b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com[span_132](start_span)[span_132](end_span)</div>
-            <button class="btn-secundario" id="btnFecharModalAjuda" data-pt="Fechar" data-en="Close">Fechar[span_133](start_span)[span_133](end_span)</button>
+            <h4 data-pt="Ajuda — Como Utilizar o aplicativo" data-en="Help — How to Use the app">Ajuda — Como Utilizar o aplicativo</h4>
+            <div class="ajuda-item" data-pt-html="<b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo." data-en-html="<b>1. Sensor identifier.</b> Analyzes an unknown sensor.<br>E.g: Enter its resistance in kΩ and temperature in °C."><b>1. Identificador de sensor.</b> Analisa um sensor desconhecido.<br>Ex: Digite a resistência em kΩ e a temperatura em °C do mesmo.</div>
+            <div class="ajuda-item" data-pt-html="<b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k." data-en-html="<b>2. Look up factory sensor.</b><br>E.g: LG → Indoor ambient sensor 1k and 25°C returns 5k."><b>2. Consultar sensor de fábrica.</b><br>Ex: LG → Sensor amb. interno 1k e 25°C retorna 5k.</div>
+            <div class="ajuda-item" data-pt-html="<b>3. Sensor paralelo.</b> Analisa os sensores que não são originais." data-en-html="<b>3. Parallel sensor.</b> Analyzes sensors that are not original."><b>3. Sensor paralelo.</b> Analisa os sensores que não são originais.</div>
+            <div class="ajuda-item" data-pt-html="<b>4. Sensor Original.</b> Analisa os sensores de fábrica." data-en-html="<b>4. Original Sensor.</b> Analyzes factory sensors."><b>4. Sensor Original.</b> Analisa os sensores de fábrica.</div>
+            <div class="ajuda-item" data-pt-html="<b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo." data-en-html="<b>5. Select manufacturer.</b> Analyzes each original sensor according to its model."><b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo.</div>
+            <div class="ajuda-item" data-pt-html="<b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor." data-en-html="<b>6. Change / Restore Parameters.</b> Allows you to update the sensor's technical information."><b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor.</div>
+            <div class="ajuda-item" data-pt-html="<b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com" data-en-html="<b>7. About</b><br>Developer: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com"><b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com</div>
+            <button class="btn-secundario" id="btnFecharModalAjuda" data-pt="Fechar" data-en="Close">Fechar</button>
         </div>
     </div>
 
-    <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA -->
+    <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA E PIX -->
     <script>
         (function() {
-            const URL_DO_SERVIDOR = "https://seu-servidor-backend.com/api/verificar"; // Substituir futuramente pela URL real
+            const URL_DO_SERVIDOR = "https://reclim-servidor.onrender.com";
 
             function obterHWID() {
                 let hwid = localStorage.getItem('_hw_secure_id');
@@ -313,20 +313,16 @@
                 const hwid = obterHWID();
                 const statusLocal = localStorage.getItem('app_licenca_ativa');
 
-                // Se já estiver validado recentemente localmente, deixa passar para não travar sem internet
                 if (statusLocal === 'VALIDO') return;
 
                 try {
-                    // Exemplo de requisição para o seu futuro backend
-                    /*
-                    const resposta = await fetch(`${URL_DO_SERVIDOR}?hwid=${hwid}`);
+                    const resposta = await fetch(`${URL_DO_SERVIDOR}/api/verificar-licenca?hwid=${hwid}`);
                     const dados = await resposta.json();
                     if (dados.liberado) {
                         localStorage.setItem('app_licenca_ativa', 'VALIDO');
                     } else {
                         bloquearApp(hwid);
                     }
-                    */
                 } catch (e) {
                     console.warn("Modo offline ou sem conexão com o servidor.");
                 }
@@ -334,17 +330,62 @@
 
             function bloquearApp(hwid) {
                 document.getElementById('appMainContainer').innerHTML = `
-                    <div style="text-align:center; padding: 20px;">
+                    <div style="text-align:center; padding: 10px;">
                         <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
-                        <p style="font-size:14px; color:#555; margin:15px 0;">Seu aplicativo precisa estar ativado para uso.</p>
+                        <p style="font-size:14px; color:#555; margin:10px 0;">Adquira sua licença de uso para desbloquear o aplicativo instantaneamente.</p>
                         <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
-                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:15px;">
-                        <p style="font-size:13px; color:#007bff;">Entre em contato com o suporte para liberar o acesso: <br><b>reclimsuporteapp@gmail.com</b></p>
+                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:10px; background:#f9f9f9;">
+                        
+                        <button class="btn-principal" id="btnComprarPix" style="background:#28a745; margin-top:5px;">Pagar Licença via Pix</button>
+                        <div id="areaPix" style="margin-top:15px; display:none; text-align:left; font-size:0.85em; background:#f8f9fa; padding:10px; border-radius:8px;">
+                            <p style="font-weight:bold; color:#333; margin-bottom:5px;">Escaneie ou copie o Pix:</p>
+                            <input type="text" id="copiaColaPix" readonly style="font-size:0.75em; margin-bottom:8px;">
+                            <button class="btn-secundario" id="btnCopiarPix" style="margin-top:0; padding:8px;">Copiar Código Pix</button>
+                        </div>
+
+                        <p style="font-size:12px; color:#007bff; margin-top:15px;">Dúvidas? Suporte: <b>reclimsuporteapp@gmail.com</b></p>
                     </div>
                 `;
+
+                document.getElementById('btnComprarPix').addEventListener('click', async function() {
+                    const btn = this;
+                    btn.textContent = "Gerando Pix...";
+                    btn.disabled = true;
+
+                    try {
+                        const resposta = await fetch(`${URL_DO_SERVIDOR}/api/criar-pagamento`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ hwid: hwid })
+                        });
+                        const dados = await resposta.json();
+
+                        if (dados.sucesso && dados.qr_code) {
+                            btn.style.display = 'none';
+                            const areaPix = document.getElementById('areaPix');
+                            areaPix.style.display = 'block';
+                            document.getElementById('copiaColaPix').value = dados.qr_code;
+                        } else {
+                            alert("⚠️ Erro ao gerar Pix. Entre em contato com o suporte.");
+                            btn.textContent = "Pagar Licença via Pix";
+                            btn.disabled = false;
+                        }
+                    } catch (err) {
+                        alert("⚠️ Erro de conexão com o servidor de pagamento.");
+                        btn.textContent = "Pagar Licença via Pix";
+                        btn.disabled = false;
+                    }
+                });
+
+                document.getElementById('btnCopiarPix').addEventListener('click', function() {
+                    const inputPix = document.getElementById('copiaColaPix');
+                    inputPix.select();
+                    inputPix.setSelectionRange(0, 99999);
+                    navigator.clipboard.writeText(inputPix.value);
+                    alert("✅ Código Pix copiado com sucesso! Cole no aplicativo do seu banco para pagar.");
+                });
             }
 
-            // Executa a checagem ao abrir
             checarLicencaNaNuvem();
         })();
     </script>
@@ -457,7 +498,6 @@
                 }
             })();
 
-            // ===== Cadastro de Fabricantes (menu ⋮) =====
             const CHAVE_FABRICANTES_CUSTOM = "app_sens_fabricantes_custom";
             let fabricantesCustom = [];
             const TIPOS_SENSOR = [
@@ -616,7 +656,6 @@
                 }
             })();
 
-            // ===== Menu ⋮ e modais =====
             const btnMenu = document.getElementById('btnMenu');
             const menuDropdown = document.getElementById('menuDropdown');
             const menuIdiomaToggle = document.getElementById('menuIdiomaToggle');
@@ -658,7 +697,6 @@
                 document.getElementById('modalAjuda').classList.remove('aberto');
             });
 
-            // ===== Idioma (Português / Inglês) Integrado no Menu (Padrão: Português) =====
             const CHAVE_IDIOMA = "app_sens_idioma";
             let idiomaAtual = localStorage.getItem(CHAVE_IDIOMA) || 'pt';
 

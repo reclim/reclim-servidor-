@@ -47,7 +47,7 @@ app.post('/api/criar-pagamento', async (req, res) => {
                 'X-Idempotency-Key': `${hwid}-${Date.now()}`
             },
             body: JSON.stringify({
-                transaction_amount: 49.90, // Defina o valor do seu app aqui
+                transaction_amount: 39.90, // Valor atualizado para R$ 39,90
                 description: `Licença App Analisador NTC - HWID: ${hwid}`,
                 payment_method_id: 'pix',
                 payer: {
@@ -111,3 +111,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+

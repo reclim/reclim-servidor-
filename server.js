@@ -44,7 +44,7 @@ app.post('/api/criar-pagamento', async (req, res) => {
                 'X-Idempotency-Key': `${hwid}-${Date.now()}`
             },
             body: JSON.stringify({
-                transaction_amount: 39.90,
+                transaction_amount: 0.01,
                 description: `Licença App Analisador NTC - HWID: ${hwid}`,
                 payment_method_id: 'pix',
                 payer: {

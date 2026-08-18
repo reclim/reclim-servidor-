@@ -55,9 +55,18 @@
         .btn-remover { background: #dc3545; color: white; }
         .ajuda-item { margin-bottom: 14px; font-size: 0.9em; line-height: 1.55; color: #333; }
         .ajuda-item b { color: #007bff; }
+        #telaCarregando { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; width:100%; }
+        .spinner { width:48px; height:48px; border:5px solid #e0e0e0; border-top-color:#007bff; border-radius:50%; animation:girar 0.8s linear infinite; margin-bottom:16px; }
+        @keyframes girar { to { transform: rotate(360deg); } }
+        #telaCarregando p { color:#555; font-size:0.95em; text-align:center; padding:0 20px; }
     </style>
 </head>
 <body>
+
+    <div id="telaCarregando">
+        <div class="spinner"></div>
+        <p>Carregando, aguarde um instante...</p>
+    </div>
 
     <!-- MÓDULO DE VALIDAÇÃO ONLINE DA LICENÇA E PIX -->
     <script>
@@ -73,11 +82,17 @@
                 return hwid;
             }
 
+            function esconderTelaCarregando() {
+                const tela = document.getElementById('telaCarregando');
+                if (tela) tela.remove();
+            }
+
             async function checarLicencaNaNuvem() {
                 const hwid = obterHWID();
                 const statusLocal = localStorage.getItem('app_licenca_ativa');
 
                 if (statusLocal === 'VALIDO') {
+                    esconderTelaCarregando();
                     document.getElementById('appMainContainer').style.display = 'block';
                     return;
                 }
@@ -87,6 +102,7 @@
                     const dados = await resposta.json();
                     if (dados.liberado) {
                         localStorage.setItem('app_licenca_ativa', 'VALIDO');
+                        esconderTelaCarregando();
                         document.getElementById('appMainContainer').style.display = 'block';
                     } else {
                         bloquearApp(hwid);
@@ -95,6 +111,7 @@
                     console.warn("Modo offline ou sem conexão com o servidor.");
                     // Se estiver offline mas já validou antes, deixa passar. Senão, bloqueia por segurança.
                     if (statusLocal === 'VALIDO') {
+                        esconderTelaCarregando();
                         document.getElementById('appMainContainer').style.display = 'block';
                     } else {
                         bloquearApp(hwid);
@@ -103,10 +120,12 @@
             }
 
             function bloquearApp(hwid) {
+                esconderTelaCarregando();
                 document.body.innerHTML = `
                     <div class="container" style="text-align:center; margin-top: 50px;">
                         <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
                         <p style="font-size:14px; color:#555; margin:10px 0;">Adquira sua licença de uso para desbloquear o aplicativo instantaneamente.</p>
+                        <p id="precoLicenca" style="font-size:22px; font-weight:bold; color:#28a745; margin:12px 0;">Consultando valor...</p>
                         <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
                         <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:10px; background:#f9f9f9;">
                         
@@ -123,6 +142,16 @@
                         </div>
                     </div>
                 `;
+
+                fetch(`${URL_DO_SERVIDOR}/api/preco`)
+                    .then(r => r.json())
+                    .then(dados => {
+                        const valorFormatado = Number(dados.valor).toFixed(2).replace('.', ',');
+                        document.getElementById('precoLicenca').textContent = `R$ ${valorFormatado}`;
+                    })
+                    .catch(() => {
+                        document.getElementById('precoLicenca').textContent = '';
+                    });
 
                 document.getElementById('btnComprarPix').addEventListener('click', async function() {
                     const btn = this;
@@ -918,3 +947,4 @@
     </script>
 </body>
 </html>
+

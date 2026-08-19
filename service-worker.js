@@ -1,5 +1,5 @@
 
-const CACHE_NAME = "reclim-licenca-cache-v2";
+const CACHE_NAME = "reclim-licenca-cache-v3";
 const ARQUIVOS = [
   "./index.html",
   "./manifest.json",

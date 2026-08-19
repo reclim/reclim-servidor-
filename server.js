@@ -12,7 +12,7 @@ const SENHA_MESTRE = process.env.SENHA_MESTRE;
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
 // Valor da licença - único lugar do código onde o preço é definido
-const PRECO_LICENCA = 0.01;
+const PRECO_LICENCA = 39.90;
 
 // Lê a lista de licenças liberadas guardada no jsonbin.io
 async function lerLicencas() {

@@ -101,10 +101,12 @@ app.post('/api/criar-pagamento', async (req, res) => {
                 qr_code_base64: dadosPagamento.point_of_interaction.transaction_data.qr_code_base64
             });
         } else {
+            console.error(`Erro ao gerar Pix (HWID ${hwid}):`, JSON.stringify(dadosPagamento));
             res.status(400).json({ erro: 'Erro ao gerar Pix no Mercado Pago', detalhes: dadosPagamento });
         }
 
     } catch (e) {
+        console.error(`Erro interno ao gerar Pix (HWID ${hwid}):`, e.message);
         res.status(500).json({ erro: 'Erro interno ao processar pagamento', detalhe: e.message });
     }
 });
@@ -198,5 +200,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+
 
 

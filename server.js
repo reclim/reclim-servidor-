@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -9,6 +10,7 @@ const accessToken = process.env.MP_ACCESS_TOKEN;
 const JSONBIN_ID = process.env.JSONBIN_ID;
 const JSONBIN_KEY = process.env.JSONBIN_KEY;
 const SENHA_MESTRE = process.env.SENHA_MESTRE;
+const WEBHOOK_SECRET = process.env.MP_WEBHOOK_SECRET;
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
 
 // Valor da licença - único lugar do código onde o preço é definido
@@ -111,6 +113,34 @@ app.post('/api/criar-pagamento', async (req, res) => {
 app.post('/api/webhook-pagamento', async (req, res) => {
     const evento = req.body;
 
+    // Validação da assinatura - confirma que a notificação veio mesmo do Mercado Pago
+    const xSignature = req.headers['x-signature'];
+    const xRequestId = req.headers['x-request-id'];
+    const dataIdQuery = req.query['data.id'];
+
+    if (WEBHOOK_SECRET && xSignature && xRequestId) {
+        const partes = xSignature.split(',').reduce((acc, parte) => {
+            const [chave, valor] = parte.split('=');
+            if (chave && valor) acc[chave.trim()] = valor.trim();
+            return acc;
+        }, {});
+
+        const ts = partes['ts'];
+        const v1Recebido = partes['v1'];
+        const idParaManifest = dataIdQuery || evento.data?.id || evento.id;
+
+        const manifest = `id:${idParaManifest};request-id:${xRequestId};ts:${ts};`;
+        const v1Calculado = crypto
+            .createHmac('sha256', WEBHOOK_SECRET)
+            .update(manifest)
+            .digest('hex');
+
+        if (v1Calculado !== v1Recebido) {
+            console.warn('Assinatura do webhook inválida - notificação rejeitada');
+            return res.sendStatus(401);
+        }
+    }
+
     // Responde rápido — o Mercado Pago não espera o processamento terminar
     res.sendStatus(200);
 
@@ -168,4 +198,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 

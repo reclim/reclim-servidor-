@@ -1,10 +1,20 @@
+
 const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+const ORIGENS_PERMITIDAS = ['https://reclim.github.io'];
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || ORIGENS_PERMITIDAS.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Origem não permitida'));
+        }
+    }
+}));
 
 const accessToken = process.env.MP_ACCESS_TOKEN;
 const JSONBIN_ID = process.env.JSONBIN_ID;
@@ -59,6 +69,9 @@ app.get('/api/verificar-licenca', async (req, res) => {
 });
 
 // Rota para gerar o pagamento via Pix (Mercado Pago)
+const ultimaTentativaPorHwid = new Map();
+const INTERVALO_MINIMO_MS = 30 * 1000; // 30 segundos entre tentativas do mesmo HWID
+
 app.post('/api/criar-pagamento', async (req, res) => {
     const { hwid, email } = req.body;
 
@@ -69,6 +82,13 @@ app.post('/api/criar-pagamento', async (req, res) => {
     if (!accessToken) {
         return res.status(500).json({ erro: 'Token do Mercado Pago não configurado no servidor.' });
     }
+
+    const agora = Date.now();
+    const ultimaTentativa = ultimaTentativaPorHwid.get(hwid);
+    if (ultimaTentativa && (agora - ultimaTentativa) < INTERVALO_MINIMO_MS) {
+        return res.status(429).json({ erro: 'Aguarde alguns segundos antes de tentar novamente.' });
+    }
+    ultimaTentativaPorHwid.set(hwid, agora);
 
     try {
         const respostaMP = await fetch('https://api.mercadopago.com/v1/payments', {

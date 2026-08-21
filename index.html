@@ -1,9 +1,10 @@
 <!DOCTYPE html>
+<!-- Versão 3 -->
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Analisador de Sensores NTC</title>
+    <title>Analisador de Sensores NTC - v3</title>
     <meta name="theme-color" content="#007bff">
     <meta name="description" content="Analisador de sensores NTC para ar-condicionado - Reclim Cursos e Assistência Técnica">
     <link rel="manifest" href="manifest.json">
@@ -41,6 +42,7 @@
         .menu-dropdown.aberto { display: block; }
         .menu-item { padding: 12px 16px; font-size: 0.9em; cursor: pointer; color: #333; }
         .menu-item:hover { background: #f0f2f5; }
+        .menu-item.ativo { background: #fff; color: #3c3c3c; font-weight: 400; }
         .menu-submenu { display: none; border-top: 1px solid #eee; border-bottom: 1px solid #eee; background: #fafbfc; }
         .menu-submenu.aberto { display: block; }
         .menu-subitem { padding: 10px 16px 10px 24px; font-size: 0.85em; cursor: pointer; color: #495057; }
@@ -438,7 +440,8 @@
             <div class="ajuda-item" data-pt-html="<b>4. Sensor Original.</b> Analisa os sensores de fábrica." data-en-html="<b>4. Original Sensor.</b> Analyzes factory sensors."><b>4. Sensor Original.</b> Analisa os sensores de fábrica.</div>
             <div class="ajuda-item" data-pt-html="<b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo." data-en-html="<b>5. Select manufacturer.</b> Analyzes each original sensor according to its model."><b>5. Selecionar fabricante.</b> Analisa cada sensor original de acordo com seu modelo.</div>
             <div class="ajuda-item" data-pt-html="<b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor." data-en-html="<b>6. Change / Restore Parameters.</b> Allows you to update the sensor's technical information."><b>6. Alterar / Restaurar Parâmetros.</b> Permite atualizar as informações técnicas do sensor.</div>
-            <div class="ajuda-item" data-pt-html="<b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com" data-en-html="<b>7. About</b><br>Developer: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com"><b>7. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com</div>
+            <div class="ajuda-item" data-pt-html="<b>7. Cadastrar Fabricante.</b> Permite incluir um novo modelo." data-en-html="<b>7. Register Manufacturer.</b> Allows you to include a new model."><b>7. Cadastrar Fabricante.</b> Permite incluir um novo modelo.</div>
+            <div class="ajuda-item" data-pt-html="<b>8. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com" data-en-html="<b>8. About</b><br>Developer: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com"><b>8. Sobre</b><br>Desenvolvedor: João B.P da Silva<br>Reclim Cursos e Assistência Técnica<br>reclimsuporteapp@gmail.com</div>
             <button class="btn-secundario" id="btnFecharModalAjuda" data-pt="Fechar" data-en="Close">Fechar</button>
         </div>
     </div>
@@ -957,6 +960,7 @@
     </script>
 </body>
 </html>
+
 
 
 

@@ -1,4 +1,3 @@
-
 const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
@@ -47,6 +46,23 @@ async function salvarLicencas(licencasSet) {
     });
 }
 
+// Separa um nome completo em primeiro nome e sobrenome
+function separarNome(nomeCompleto) {
+    const partes = (nomeCompleto || '').trim().split(/\s+/);
+    const first_name = partes.shift() || undefined;
+    const last_name = partes.length > 0 ? partes.join(' ') : undefined;
+    return { first_name, last_name };
+}
+
+// Extrai DDD e número de um telefone informado em texto livre
+function separarTelefone(telefoneTexto) {
+    const digitos = (telefoneTexto || '').replace(/\D/g, '');
+    if (digitos.length < 10) return undefined;
+    const area_code = digitos.slice(0, 2);
+    const number = digitos.slice(2);
+    return { area_code, number };
+}
+
 // Rota para o front-end consultar o valor atual da licença
 app.get('/api/preco', (req, res) => {
     res.json({ valor: PRECO_LICENCA });
@@ -68,12 +84,12 @@ app.get('/api/verificar-licenca', async (req, res) => {
     }
 });
 
-// Rota para gerar o pagamento via Pix (Mercado Pago)
 const ultimaTentativaPorHwid = new Map();
 const INTERVALO_MINIMO_MS = 30 * 1000; // 30 segundos entre tentativas do mesmo HWID
 
+// Rota para gerar o pagamento via Pix (Mercado Pago)
 app.post('/api/criar-pagamento', async (req, res) => {
-    const { hwid, email } = req.body;
+    const { hwid, email, nome, telefone } = req.body;
 
     if (!hwid) {
         return res.status(400).json({ erro: 'HWID é obrigatório para vincular a compra.' });
@@ -91,6 +107,16 @@ app.post('/api/criar-pagamento', async (req, res) => {
     ultimaTentativaPorHwid.set(hwid, agora);
 
     try {
+        const { first_name, last_name } = separarNome(nome);
+        const phone = separarTelefone(telefone);
+
+        const payer = {
+            email: email || 'cliente@reclim.com'
+        };
+        if (first_name) payer.first_name = first_name;
+        if (last_name) payer.last_name = last_name;
+        if (phone) payer.phone = phone;
+
         const respostaMP = await fetch('https://api.mercadopago.com/v1/payments', {
             method: 'POST',
             headers: {
@@ -102,11 +128,11 @@ app.post('/api/criar-pagamento', async (req, res) => {
                 transaction_amount: PRECO_LICENCA,
                 description: `Licença App Analisador NTC - HWID: ${hwid}`,
                 payment_method_id: 'pix',
-                payer: {
-                    email: email || 'cliente@reclim.com'
-                },
+                payer: payer,
                 metadata: {
-                    hwid: hwid
+                    hwid: hwid,
+                    nome: nome || '',
+                    telefone: telefone || ''
                 }
             })
         });
@@ -220,6 +246,7 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 
 
 

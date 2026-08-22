@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- Versão 5 -->
+<!-- Versão 5.1 -->
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Analisador de Sensores NTC - v5</title>
+    <title>Analisador de Sensores NTC - v5.1</title>
     <meta name="theme-color" content="#007bff">
     <meta name="description" content="Analisador de sensores NTC para ar-condicionado - Reclim Cursos e Assistência Técnica">
     <link rel="manifest" href="manifest.json">
@@ -125,14 +125,23 @@
                 esconderTelaCarregando();
                 document.body.innerHTML = `
                     <div class="container" style="text-align:center; margin-top: 50px;">
-                        <h3 style="color:#dc3545;">🔒 Acesso Não Ativado</h3>
+                        <img src="icon-192.png" alt="Analisador de Sensores NTC" style="width:72px; height:72px; border-radius:16px; margin-bottom:10px;">
+                        <h3 style="color:#007bff; margin-bottom:4px;">Analisador de Sensores NTC</h3>
+                        <h3 style="color:#dc3545; font-size:1em; margin-bottom:10px;">🔒 Acesso Não Ativado</h3>
                         <p style="font-size:14px; color:#555; margin:10px 0;">Adquira sua licença de uso para desbloquear o aplicativo instantaneamente.</p>
                         <p id="precoLicenca" style="font-size:22px; font-weight:bold; color:#28a745; margin:12px 0;">Consultando valor...</p>
-                        <p style="font-size:12px; color:#777;">ID do Aparelho:</p>
-                        <input type="text" value="${hwid}" readonly style="text-align:center; font-weight:bold; margin-bottom:10px; background:#f9f9f9;">
+
+                        <p style="font-size:12px; color:#777; text-align:left; margin-top:10px;">Nome completo:</p>
+                        <input type="text" id="inputNomeCliente" placeholder="Seu nome completo" style="margin-bottom:5px;">
+
+                        <p style="font-size:12px; color:#777; text-align:left; margin-top:10px;">Telefone:</p>
+                        <input type="tel" id="inputTelefoneCliente" placeholder="(00) 00000-0000" style="margin-bottom:5px;">
 
                         <p style="font-size:12px; color:#777; text-align:left; margin-top:10px;">Seu e-mail (para receber o comprovante):</p>
                         <input type="email" id="inputEmailCliente" placeholder="seuemail@exemplo.com" style="margin-bottom:5px;">
+
+                        <p style="font-size:12px; color:#777; text-align:left; margin-top:10px;">Confirme seu e-mail:</p>
+                        <input type="email" id="inputConfirmarEmailCliente" placeholder="Digite o e-mail novamente" style="margin-bottom:5px;">
 
                         <button class="btn-principal" id="btnComprarPix" style="background:#28a745; margin-top:10px;">Pagar Licença via Pix</button>
                         <div id="areaPix" style="margin-top:15px; display:none; text-align:left; font-size:0.85em; background:#f8f9fa; padding:10px; border-radius:8px;">
@@ -160,10 +169,25 @@
 
                 document.getElementById('btnComprarPix').addEventListener('click', async function() {
                     const btn = this;
+                    const nomeCliente = document.getElementById('inputNomeCliente').value.trim();
+                    const telefoneCliente = document.getElementById('inputTelefoneCliente').value.trim();
                     const emailCliente = document.getElementById('inputEmailCliente').value.trim();
+                    const confirmarEmailCliente = document.getElementById('inputConfirmarEmailCliente').value.trim();
 
+                    if (!nomeCliente) {
+                        alert("⚠️ Por favor, informe seu nome completo.");
+                        return;
+                    }
+                    if (!telefoneCliente) {
+                        alert("⚠️ Por favor, informe seu telefone.");
+                        return;
+                    }
                     if (!emailCliente || !emailCliente.includes('@')) {
                         alert("⚠️ Por favor, informe um e-mail válido antes de continuar.");
+                        return;
+                    }
+                    if (emailCliente.toLowerCase() !== confirmarEmailCliente.toLowerCase()) {
+                        alert("⚠️ Os e-mails informados não coincidem. Confira e tente novamente.");
                         return;
                     }
 
@@ -174,7 +198,7 @@
                         const resposta = await fetch(`${URL_DO_SERVIDOR}/api/criar-pagamento`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ hwid: hwid, email: emailCliente })
+                            body: JSON.stringify({ hwid: hwid, email: emailCliente, nome: nomeCliente, telefone: telefoneCliente })
                         });
                         const dados = await resposta.json();
 
@@ -960,6 +984,7 @@
     </script>
 </body>
 </html>
+
 
 
 
